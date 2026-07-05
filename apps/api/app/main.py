@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.companies.routes import router as companies_router
 from app.config import settings
 
 app = FastAPI(
@@ -19,12 +20,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ── Routers ────────────────────────────────────────────────────
+app.include_router(companies_router, prefix="/api/v1")
 
-@app.get("/health")
+
+# ── Health ─────────────────────────────────────────────────────
+@app.get("/health", tags=["system"])
 async def health() -> dict:
     return {"status": "ok", "version": "0.1.0"}
-
-
-# Routers will be registered here as they are built
-# from app.companies.routes import router as companies_router
-# app.include_router(companies_router, prefix="/api/v1")
