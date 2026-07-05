@@ -1,5 +1,5 @@
 {
-  "name": "atlas",
+  "name": "omniiq",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",

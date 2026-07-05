@@ -1,15 +1,15 @@
-# Atlas
+# OmniIQ
 
 **The Company Brain for Autonomous Digital Visibility.**
 
-Atlas is not an SEO tool. It's not a Knowledge Graph platform. It's the system
+OmniIQ is not an SEO tool. It's not a Knowledge Graph platform. It's the system
 that understands how the world sees your business — and knows what to do about it.
 
-> *Yext knows who you are. Atlas knows what you should do.*
+> *Yext knows who you are. OmniIQ knows what you should do.*
 
 ---
 
-## What Atlas Does
+## What OmniIQ Does
 
 ```
 Your Business Knowledge

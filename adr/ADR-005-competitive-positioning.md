@@ -1,12 +1,12 @@
 # ADR-005: Competitive Positioning
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-05
 
 ## Context
 
 After studying Yext (the most structurally similar competitor), we need to formally
-define how Atlas is differentiated and what category we are creating.
+define how OmniIQ is differentiated and what category we are creating.
 
 ## Yext Analysis
 
@@ -30,13 +30,13 @@ They sync business data across search engines, AI, maps, and directories.
 ### Category We Create: Autonomous Visibility Management (AVM)
 
 We are not a Knowledge Management tool. We are not an SEO tool.
-We are the first Autonomous Visibility Management platform.
+OmniIQ is the first Autonomous Visibility Management platform.
 
 ### Positioning
 
 ```
 Yext knows who you are.
-Atlas knows what you should do.
+OmniIQ knows what you should do.
 ```
 
 ### The Closed Loop (Our Core Differentiator)
@@ -57,9 +57,9 @@ No competitor closes this loop today. This is our moat.
 - Action history + attribution creates institutional memory that cannot be exported meaningfully
 
 **Secondary moat: Category Ownership**
-- We will own the term "Autonomous Visibility Management"
+- OmniIQ owns the term "Autonomous Visibility Management"
 - Publish research, benchmark data, and thought leadership on AI visibility
-- The "Entity Authority Score" metric (see RFC-003) becomes industry standard
+- The "Entity Authority Score" metric becomes industry standard
 
 ## Consequences
 

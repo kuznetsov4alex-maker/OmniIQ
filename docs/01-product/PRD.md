@@ -11,7 +11,7 @@ and no tool closes the full loop from knowledge to action to outcome.
 
 ## Solution
 
-Atlas — the Company Brain.
+OmniIQ — the Company Brain.
 
 A system that:
 1. Builds and maintains a verified Knowledge Graph of your business
@@ -22,7 +22,7 @@ A system that:
 
 ## Competitive Context
 
-| | Yext | SEMrush | Brandwatch | **Atlas** |
+| | Yext | SEMrush | Brandwatch | **OmniIQ** |
 |---|---|---|---|---|
 | Knowledge Graph | ✅ | ❌ | ❌ | ✅ |
 | AI Visibility signals | ❌ | Partial | ❌ | ✅ |
@@ -32,7 +32,7 @@ A system that:
 | ROI Attribution | ❌ | Partial | ❌ | ✅ |
 | Growing Business (SMB+) | ❌ | ✅ | ❌ | ✅ |
 
-**Key differentiator:** Yext stores and distributes. Atlas decides and learns.
+**Key differentiator:** Yext stores and distributes. OmniIQ decides and learns.
 
 ## Target Segments (Priority Order)
 

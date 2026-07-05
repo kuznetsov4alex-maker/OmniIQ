@@ -5,7 +5,7 @@ from app.companies.routes import router as companies_router
 from app.config import settings
 
 app = FastAPI(
-    title="Atlas API",
+    title="OmniIQ API",
     description="Company Brain for Autonomous Digital Visibility",
     version="0.1.0",
     docs_url="/docs" if settings.app_debug else None,

@@ -1,7 +1,7 @@
 [project]
-name = "atlas-api"
+name = "omniiq-api"
 version = "0.1.0"
-description = "Atlas API — Company Brain for Autonomous Digital Visibility"
+description = "OmniIQ API — Company Brain for Autonomous Digital Visibility"
 requires-python = ">=3.12"
 
 dependencies = [
