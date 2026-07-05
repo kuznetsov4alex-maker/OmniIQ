@@ -1,3 +1,6 @@
 # Vision
 
-Atlas is the operating system for digital visibility in the AI era.
+Atlas is the Company Brain for autonomous digital visibility.
+
+Every business deserves a system that understands how the world sees it —
+and knows exactly what to do about it.
