@@ -358,16 +358,167 @@
 
     /* ── Comparison table ────────────────────────────────────── */
     .compare-section { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
-    .vs-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 14px; }
-    .vs-table th { text-align: left; padding: 12px 20px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--dimmed); border-bottom: 1px solid var(--border); }
-    .vs-table th:not(:first-child) { text-align: center; }
-    .vs-table td { padding: 14px 20px; border-bottom: 1px solid var(--border); color: var(--muted); }
-    .vs-table td:not(:first-child) { text-align: center; }
-    .vs-table td:first-child { font-weight: 500; color: var(--text); }
-    .vs-table tr:hover td { background: rgba(255,255,255,0.02); }
-    .chk { color: var(--emerald); font-weight: 700; font-size: 16px; }
-    .crs { color: var(--dimmed); }
-    .col-o { color: var(--accent2); font-weight: 700; }
+
+    /* ── Generation comparison ───────────────────────────────── */
+    .gen-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .gen-card {
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .gen-card.old {
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .gen-card.new {
+      background: linear-gradient(145deg, rgba(99,102,241,0.1), rgba(34,211,238,0.05));
+      border: 1px solid rgba(99,102,241,0.3);
+    }
+
+    .gen-card.new::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .gen-era {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      padding: 5px 12px; border-radius: 99px; margin-bottom: 20px;
+    }
+
+    .gen-era.old-era {
+      background: rgba(71,85,105,0.3);
+      border: 1px solid rgba(71,85,105,0.4);
+      color: var(--dimmed);
+    }
+
+    .gen-era.new-era {
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.35);
+      color: var(--accent2);
+    }
+
+    .gen-title {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .gen-card.old .gen-title { color: var(--muted); }
+    .gen-card.new .gen-title { color: var(--text); }
+
+    .gen-desc {
+      font-size: 14px; color: var(--dimmed); line-height: 1.6; margin-bottom: 28px;
+    }
+
+    .gen-card.new .gen-desc { color: var(--muted); }
+
+    .gen-engines {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+
+    .gen-engine-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+    }
+
+    .gen-card.old .gen-engine-row {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .gen-card.new .gen-engine-row {
+      background: rgba(99,102,241,0.05);
+      border: 1px solid rgba(99,102,241,0.12);
+    }
+
+    .gen-engine-icon {
+      font-size: 18px; flex-shrink: 0; margin-top: 1px;
+      filter: saturate(0) opacity(0.4);
+    }
+
+    .gen-card.new .gen-engine-icon {
+      filter: none;
+    }
+
+    .gen-engine-name {
+      font-size: 13px; font-weight: 600; margin-bottom: 3px;
+    }
+
+    .gen-card.old .gen-engine-name { color: var(--dimmed); }
+    .gen-card.new .gen-engine-name { color: var(--text); }
+
+    .gen-engine-desc {
+      font-size: 12px; line-height: 1.5;
+    }
+
+    .gen-card.old .gen-engine-desc { color: var(--dimmed); }
+    .gen-card.new .gen-engine-desc { color: var(--muted); }
+
+    .gen-engine-status {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 11px; font-weight: 700;
+      padding: 3px 8px; border-radius: 99px;
+    }
+
+    .status-missing {
+      background: rgba(71,85,105,0.2);
+      color: var(--dimmed);
+    }
+
+    .status-partial {
+      background: rgba(245,158,11,0.1);
+      color: var(--amber);
+    }
+
+    .status-full {
+      background: rgba(16,185,129,0.1);
+      color: var(--emerald);
+    }
+
+    .gen-connect {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 48px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .gen-connect-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    .gen-connect-tag {
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    @media (max-width:900px) {
+      .gen-compare { grid-template-columns: 1fr; }
+    }
+
 
     /* ── Footer ──────────────────────────────────────────────── */
     footer { padding: 40px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
@@ -767,30 +918,128 @@
   </div>
 </section>
 
-<!-- ── Comparison ─────────────────────────────────────────────── -->
+<!-- ── Generation comparison ──────────────────────────────────── -->
 <section class="compare-section" id="compare">
-  <div class="sec-label reveal">vs Competitors</div>
-  <h2 class="sec-title reveal">OmniIQ vs Yext vs doing it manually</h2>
-  <table class="vs-table reveal">
-    <thead>
-      <tr>
-        <th>Feature</th>
-        <th class="col-o">OmniIQ</th>
-        <th>Yext</th>
-        <th>Manual</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>7-day free trial (real data)</td><td><span class="chk col-o">✓</span></td><td><span class="crs">✕</span></td><td><span class="crs">✕</span></td></tr>
-      <tr><td>Score chart (daily trend)</td><td><span class="chk col-o">✓</span></td><td><span class="crs">✕</span></td><td><span class="crs">✕</span></td></tr>
-      <tr><td>AI visibility monitoring</td><td><span class="chk col-o">✓</span></td><td><span class="crs">✕</span></td><td><span class="crs">✕</span></td></tr>
-      <tr><td>GPT-4o decision engine</td><td><span class="chk col-o">✓</span></td><td><span class="crs">✕</span></td><td><span class="crs">✕</span></td></tr>
-      <tr><td>Weekly progress reports</td><td><span class="chk col-o">✓</span></td><td><span class="crs">Partial</span></td><td><span class="crs">✕</span></td></tr>
-      <tr><td>Price for 1 company</td><td class="col-o">$49/mo</td><td>$499+/mo</td><td>$0 (but 40h/mo)</td></tr>
-      <tr><td>Pay after seeing results</td><td class="col-o">Yes ✓</td><td>No</td><td>N/A</td></tr>
-    </tbody>
-  </table>
+  <div class="sec-label reveal">New Generation</div>
+  <h2 class="sec-title reveal">
+    Traditional tools cover one channel.<br/>
+    OmniIQ covers the entire visibility stack.
+  </h2>
+  <p style="font-size:15px;color:var(--muted);max-width:560px;line-height:1.7;margin-top:12px" class="reveal">
+    Old tools were built for Google's 10 blue links. OmniIQ was built for the AI-first world — where your business needs to be understood by machines, not just indexed by crawlers.
+  </p>
+
+  <div class="gen-compare">
+
+    <!-- Old generation -->
+    <div class="gen-card old reveal">
+      <div class="gen-era old-era">🕰 Traditional tools</div>
+      <div class="gen-title">Single-channel, reactive</div>
+      <div class="gen-desc">SEO platforms, listing managers, and analytics tools each solve one piece of the puzzle in isolation — and none of them understand AI.</div>
+
+      <div class="gen-engines">
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🔍</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">SEO signals only</div>
+            <div class="gen-engine-desc">Tracks rankings, keywords, backlinks. Doesn't know what AI models think of you.</div>
+          </div>
+          <div class="gen-engine-status status-partial">Partial</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🤖</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">AI visibility</div>
+            <div class="gen-engine-desc">No tool measures how ChatGPT, Gemini or Perplexity describe your business.</div>
+          </div>
+          <div class="gen-engine-status status-missing">Missing</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🏷️</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Entity &amp; knowledge graph</div>
+            <div class="gen-engine-desc">Wikidata, Wikipedia, schema.org — AI fact sources. Traditional tools ignore them.</div>
+          </div>
+          <div class="gen-engine-status status-missing">Missing</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🧠</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Decision engine</div>
+            <div class="gen-engine-desc">You get a dashboard of data. You still have to figure out what to do with it yourself.</div>
+          </div>
+          <div class="gen-engine-status status-missing">Missing</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🔄</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Execution &amp; learning loop</div>
+            <div class="gen-engine-desc">No tracking of what you actually did, no feedback on what worked.</div>
+          </div>
+          <div class="gen-engine-status status-missing">Missing</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OmniIQ -->
+    <div class="gen-card new reveal">
+      <div class="gen-era new-era">✦ OmniIQ Platform</div>
+      <div class="gen-title">Full-stack, autonomous</div>
+      <div class="gen-desc">Five integrated engines cover every channel where AI and search learn about your business — and close the loop from insight to result.</div>
+
+      <div class="gen-engines">
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">📚</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Knowledge Engine</div>
+            <div class="gen-engine-desc">Extracts structured facts from your content. Builds a Company Brain that AI systems can understand.</div>
+          </div>
+          <div class="gen-engine-status status-full">Full</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">📡</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Signal Engine</div>
+            <div class="gen-engine-desc">Monitors SEO health, entity presence, AI mentions, and reputation signals — all in one unified score.</div>
+          </div>
+          <div class="gen-engine-status status-full">Full</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🧠</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Decision Engine</div>
+            <div class="gen-engine-desc">GPT-4o analyzes your gaps and generates a prioritized, impact-ranked action plan. No interpretation needed.</div>
+          </div>
+          <div class="gen-engine-status status-full">Full</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">⚡</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Execution Engine</div>
+            <div class="gen-engine-desc">Tracks every approved action. Measures its score impact. Proves what worked.</div>
+          </div>
+          <div class="gen-engine-status status-full">Full</div>
+        </div>
+        <div class="gen-engine-row">
+          <div class="gen-engine-icon">🔄</div>
+          <div style="flex:1">
+            <div class="gen-engine-name">Learning Engine</div>
+            <div class="gen-engine-desc">Improves recommendations over time based on your results. Gets smarter the longer you use it.</div>
+          </div>
+          <div class="gen-engine-status status-full">Full</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gen-connect reveal">
+    <div class="gen-connect-line"></div>
+    <div class="gen-connect-tag">OmniIQ is not a better SEO tool — it's a different category entirely</div>
+    <div class="gen-connect-line"></div>
+  </div>
 </section>
+
 
 <!-- ── Final CTA ───────────────────────────────────────────────── -->
 <section class="cta-final" id="cta">
