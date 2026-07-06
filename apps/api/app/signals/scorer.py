@@ -2,17 +2,18 @@
 Visibility Scorer — computes OmniIQ Visibility Score from raw signals.
 
 Score breakdown (0–100):
-  SEO    → 35%  (technical foundation)
-  AI     → 35%  (AI-era presence — highest weight, our core differentiator)
-  Entity → 20%  (knowledge graph presence)
-  Reputation → 10% (reviews, social)
+  SEO        → 30%  (technical foundation: SSL, sitemap, robots)
+  AI         → 35%  (AI-era presence — Алиса, GigaChat, YandexGPT — our core differentiator)
+  Entity     → 20%  (knowledge graph: Wikidata, Schema.org)
+  Social     → 10%  (ВКонтакте, Telegram, Одноклассники)
+  Reputation →  5%  (reviews)
 
 Grade:
-  A  ≥ 80  → Strong visibility
-  B  ≥ 60  → Good, some gaps
-  C  ≥ 40  → Weak, significant gaps
-  D  ≥ 20  → Poor
-  F  <  20  → Critical issues
+  A  ≥ 80  → Высокая видимость
+  B  ≥ 60  → Хорошо, есть точки роста
+  C  ≥ 40  → Слабо, значительные пробелы
+  D  ≥ 20  → Критические проблемы
+  F  <  20  → Бизнес невидим онлайн
 """
 
 from datetime import datetime, timezone
@@ -21,10 +22,11 @@ from app.signals.models import Signal
 from app.signals.schemas import SignalCategory, VisibilityScore
 
 WEIGHTS: dict[str, float] = {
-    "seo": 0.35,
+    "seo": 0.30,
     "ai": 0.35,
     "entity": 0.20,
-    "reputation": 0.10,
+    "social": 0.10,
+    "reputation": 0.05,
 }
 
 

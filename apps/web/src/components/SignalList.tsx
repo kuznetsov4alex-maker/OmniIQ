@@ -41,6 +41,7 @@ const TYPE_LABELS: Record<string, string> = {
   ai: 'ИИ-ассистенты',
   entity: 'Entity / Базы знаний',
   reputation: 'Репутация',
+  social: 'Социальные сети',
 };
 
 export default function SignalList({ signals, loading, companyId, onAiSignalAdded, showToast }: Props) {

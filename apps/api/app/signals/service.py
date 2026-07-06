@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.signals.collectors.ai import AICollector
 from app.signals.collectors.entity import EntityCollector
 from app.signals.collectors.seo import SEOCollector
+from app.signals.collectors.social import SocialCollector
 from app.signals.models import Signal
 from app.signals.schemas import (
     CollectRequest,
@@ -21,6 +22,7 @@ COLLECTORS = {
     "seo": SEOCollector(),
     "entity": EntityCollector(),
     "ai": AICollector(),
+    "social": SocialCollector(),
 }
 
 

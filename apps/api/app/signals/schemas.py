@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-SignalType = Literal["seo", "ai", "entity", "reputation"]
+SignalType = Literal["seo", "ai", "entity", "reputation", "social"]
 
 
 # ── Signal ─────────────────────────────────────────────────────
@@ -31,7 +31,7 @@ class SignalListResponse(BaseModel):
 
 class CollectRequest(BaseModel):
     types: list[SignalType] = Field(
-        default=["seo", "entity"],
+        default=["seo", "entity", "social"],
         description="Which signal types to collect. AI signals require manual input.",
     )
 
@@ -46,7 +46,7 @@ class CollectResponse(BaseModel):
 # ── Visibility Score ────────────────────────────────────────────
 
 class SignalCategory(BaseModel):
-    type: SignalType
+    type: str  # str (not Literal) so scorer handles new types like 'social'
     score: float = Field(..., ge=0, le=100)
     signal_count: int
     weight: float

@@ -124,6 +124,44 @@ def analyze_gaps(signals: list) -> list[Gap]:
                 current_value=avg_ai,
             ))
 
+    # ── Social Gaps (ВКонтакте, Telegram, OK.ru) ─────────────
+    if "social/vkontakte/vk_page_exists" in signal_map:
+        if signal_map["social/vkontakte/vk_page_exists"] < 1.0:
+            gaps.append(Gap(
+                category="social", metric="vk_page_exists", severity="high",
+                detail="Компания отсутствует в VK. VK-страницы ранжируются в Яндексе и используются Алисой.",
+                signal_refs=["social/vkontakte/vk_page_exists"],
+                current_value=signal_map["social/vkontakte/vk_page_exists"],
+            ))
+
+    if "social/vkontakte/vk_profile_complete" in signal_map:
+        val = signal_map["social/vkontakte/vk_profile_complete"]
+        if val < 1.0:
+            gaps.append(Gap(
+                category="social", metric="vk_profile_complete", severity="medium",
+                detail=f"Профиль VK-страницы заполнен на {val:.0%}. Нужны телефон, адрес и сайт.",
+                signal_refs=["social/vkontakte/vk_profile_complete"],
+                current_value=val,
+            ))
+
+    if "social/telegram/telegram_exists" in signal_map:
+        if signal_map["social/telegram/telegram_exists"] < 1.0:
+            gaps.append(Gap(
+                category="social", metric="telegram_exists", severity="medium",
+                detail="Telegram-канал компании не найден. Telegram индексируется Яндексом.",
+                signal_refs=["social/telegram/telegram_exists"],
+                current_value=0.0,
+            ))
+
+    if "social/odnoklassniki/ok_page_exists" in signal_map:
+        if signal_map["social/odnoklassniki/ok_page_exists"] < 1.0:
+            gaps.append(Gap(
+                category="social", metric="ok_page_exists", severity="low",
+                detail="Компания не найдена в Одноклассниках. Важно для аудитории 35+.",
+                signal_refs=["social/odnoklassniki/ok_page_exists"],
+                current_value=0.0,
+            ))
+
     # Sort: critical first, then high, medium, low
     severity_order = {"critical": 0, "high": 1, "medium": 2, "low": 3}
     gaps.sort(key=lambda g: severity_order.get(g.severity, 99))

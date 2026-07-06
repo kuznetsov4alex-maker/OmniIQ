@@ -45,7 +45,7 @@ Return a JSON object:
       "action_steps": ["step 1", "step 2", "step 3"],
       "impact_score": 7.5,
       "confidence": 0.85,
-      "category": "seo|ai|entity|reputation",
+      "category": "seo|ai|entity|reputation|social",
       "effort": "low|medium|high"
     }
   ]
@@ -129,19 +129,62 @@ def _fallback_recommendations(gaps: list[Gap]) -> list[RecommendationData]:
             ))
         elif gap.metric == "ai_visibility_unknown":
             recs.append(RecommendationData(
-                title="Measure your AI visibility baseline",
-                description="No AI visibility data exists yet. You need to know how AI models mention your company before you can improve it.",
-                reasoning="Zero AI signals collected — unknown AI presence.",
+                title="Измерьте базовую видимость в ИИ-ассистентах",
+                description="Данных о видимости в ИИ ещё нет. Нужно узнать, знает ли Алиса и GigaChat о вашей компании.",
+                reasoning="ИИ-сигналы не собраны — неизвестно присутствие в российских ИИ.",
                 action_steps=[
-                    "Ask ChatGPT: 'Tell me about [Company Name]' and record the response",
-                    "Ask Perplexity the same question",
-                    "Ask Claude: 'What do you know about [Company Name]?'",
-                    "Submit results via OmniIQ AI signal input",
-                    "Repeat monthly to track changes",
+                    "Спроси Алису: 'Что ты знаешь о компании [Название]?' — запиши ответ",
+                    "Спроси GigaChat то же самое и сравни ответы",
+                    "Внеси результаты через OmniIQ: вкладка 'Сигналы' → 'Добавить ИИ-сигнал'",
+                    "Повтори ежемесячно для отслеживания динамики",
                 ],
                 impact_score=6.0, confidence=0.8,
                 category="ai", effort="low",
                 signals_used=[],
+            ))
+        elif gap.metric == "vk_page_exists":
+            recs.append(RecommendationData(
+                title="Создайте бизнес-страницу ВКонтакте",
+                description="Ваша компания не представлена в VK. VK-страницы ранжируются в Яндексе по брендовым запросам и используются Алисой.",
+                reasoning="Сигнал vk_page_exists = 0 — компания отсутствует в VK. Яндекс отдаёт предпочтение VK-страницам в локальной выдаче.",
+                action_steps=[
+                    "Перейдите на vk.com/business и создайте бизнес-страницу",
+                    "Заполните все поля: название, описание, сайт, телефон, адрес, расписание работы",
+                    "Добавьте обложку и фото-обзор высокого качества",
+                    "Попросите 3-5 первых клиентов вступить в сообщество, чтобы появились отзывы",
+                ],
+                impact_score=7.5, confidence=0.9,
+                category="social", effort="low",
+                signals_used=["social/vkontakte/vk_page_exists"],
+            ))
+        elif gap.metric == "vk_profile_complete":
+            recs.append(RecommendationData(
+                title="Дозаполните профиль VK-страницы",
+                description="Профиль вашей VK-страницы заполнен не полностью. Полнота профиля влияет на надёжность в Яндексе и доверие Алисы к вашим данным.",
+                reasoning="vk_profile_complete < 1.0 — не заполнены телефон, адрес или ссылка на сайт.",
+                action_steps=[
+                    "Добавьте телефон в формате +7XXXXXXXXXX в разделе Контакты",
+                    "Укажите адрес или город присутствия",
+                    "Добавьте ссылку на сайт в разделе Информация",
+                ],
+                impact_score=5.0, confidence=0.85,
+                category="social", effort="low",
+                signals_used=["social/vkontakte/vk_profile_complete"],
+            ))
+        elif gap.metric == "telegram_exists":
+            recs.append(RecommendationData(
+                title="Создайте Telegram-канал компании",
+                description="Telegram-канал отсутствует. Telegram-каналы индексируются Яндексом и помогают Алисе находить официальный контакт бизнеса.",
+                reasoning="telegram_exists = 0 — Telegram-присутствия нет. Аудитория русскоязычных пользователей Telegram > 50 млн чел.",
+                action_steps=[
+                    "Создайте канал через настройки Telegram (Новый канал)",
+                    "Задайте имя канала совпадающее с вашим брендом",
+                    "Добавьте описание, логотип и ссылку на сайт",
+                    "Опубликуйте ссылку t.me/ваш_канал на сайте и в VK",
+                ],
+                impact_score=5.5, confidence=0.85,
+                category="social", effort="low",
+                signals_used=["social/telegram/telegram_exists"],
             ))
     return recs
 
