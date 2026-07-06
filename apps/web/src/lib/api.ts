@@ -77,6 +77,28 @@ export interface Signal {
   collected_at: string;
 }
 
+export interface IntegrationItem {
+  id: string;
+  company_id: string;
+  type: 'ftp' | 'yandex_oauth' | 'wordpress' | 'vk';
+  status: 'connected' | 'disconnected' | 'error';
+  label?: string;
+  unlocked_tasks: string[];
+  connected_at?: string;
+  created_at: string;
+}
+
+export interface IntegrationStatus {
+  total: number;
+  connected: number;
+  integration_types: {
+    ftp: boolean;
+    yandex_oauth: boolean;
+    wordpress: boolean;
+    vk: boolean;
+  };
+}
+
 // ── API Methods ────────────────────────────────────────────────
 
 export const api = {
@@ -131,4 +153,20 @@ export const api = {
       method: 'PATCH',
       body: JSON.stringify({ status }),
     }),
+
+  // Integrations
+  listIntegrations: (companyId: string) =>
+    apiFetch<{ items: IntegrationItem[]; total: number }>(`/api/v1/companies/${companyId}/integrations/`),
+
+  getIntegrationStatus: (companyId: string) =>
+    apiFetch<IntegrationStatus>(`/api/v1/companies/${companyId}/integrations/status`),
+
+  saveIntegration: (companyId: string, data: { type: string; credentials?: Record<string, string>; label?: string }) =>
+    apiFetch<IntegrationItem>(`/api/v1/companies/${companyId}/integrations/`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  disconnectIntegration: (companyId: string, integrationId: string) =>
+    apiFetch(`/api/v1/companies/${companyId}/integrations/${integrationId}`, { method: 'DELETE' }),
 };

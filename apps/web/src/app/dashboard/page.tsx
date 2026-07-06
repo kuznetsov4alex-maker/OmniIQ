@@ -7,10 +7,11 @@ import ScoreRing from '@/components/ScoreRing';
 import RecommendationCard from '@/components/RecommendationCard';
 import SignalList from '@/components/SignalList';
 import KnowledgePanel from '@/components/KnowledgePanel';
+import IntegrationsPanel from '@/components/IntegrationsPanel';
 import Toast from '@/components/Toast';
 import ScoreTrendChart, { type ScorePoint } from '@/components/ScoreTrendChart';
 
-type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge';
+type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations';
 
 interface Props {
   company: Company;
@@ -343,6 +344,19 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
             </div>
             <KnowledgePanel companyId={company.id} showToast={showToast} />
+          </>
+        )}
+
+        {/* ── INTEGRATIONS ──────────────────────────────────── */}
+        {tab === 'integrations' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">Автопилот</div>
+                <div className="page-subtitle">Подключите сервисы — платформа выполнит задачи автоматически, без вашего участия</div>
+              </div>
+            </div>
+            <IntegrationsPanel company={company} showToast={showToast} />
           </>
         )}
       </main>

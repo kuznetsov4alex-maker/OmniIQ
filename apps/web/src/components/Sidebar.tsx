@@ -7,6 +7,7 @@ const tabs = [
   { id: 'recommendations', icon: '⚡', label: 'Задачи' },
   { id: 'signals',         icon: '◎', label: 'Сигналы' },
   { id: 'knowledge',       icon: '◈', label: 'База знаний' },
+  { id: 'integrations',    icon: '⦿', label: 'Автопилот' },
 ];
 
 interface Props {
