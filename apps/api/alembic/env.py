@@ -10,6 +10,7 @@ from app.database import Base
 # Import all models so Alembic sees them
 from app.companies.models import Company  # noqa: F401
 from app.knowledge.models import Entity, KnowledgeChunk  # noqa: F401
+from app.signals.models import Signal  # noqa: F401
 
 config = context.config
 fileConfig(config.config_file_name)  # type: ignore[arg-type]
