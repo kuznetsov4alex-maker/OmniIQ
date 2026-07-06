@@ -369,6 +369,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
               <div>
                 <div className="page-title">Запросы и контент</div>
                 <div className="page-subtitle">Семантическое ядро из 50 запросов — платформа сгенерирует их сама и напишет статьи для продвижения в Яндексе</div>
+              </div>
             </div>
             <KeywordsPanel company={company} showToast={showToast} />
           </>
