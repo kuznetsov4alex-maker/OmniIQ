@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -66,17 +65,12 @@
       padding: 120px 24px 80px;
       position: relative; overflow: hidden;
     }
-    .hero::before { display: none; }
-
-    /* Video background */
-    .hero-video-bg {
+    /* Canvas particle background */
+    .hero-canvas-bg {
       position: absolute;
       inset: 0;
       width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: center;
       z-index: 0;
-      opacity: 0.55;
     }
 
     /* Dark overlay — keeps text sharp */
@@ -86,15 +80,15 @@
       z-index: 1;
       background:
         linear-gradient(to bottom,
-          rgba(6,10,18,0.35) 0%,
-          rgba(6,10,18,0.15) 40%,
-          rgba(6,10,18,0.55) 80%,
-          rgba(6,10,18,0.95) 100%
+          rgba(6,10,18,0.1) 0%,
+          rgba(6,10,18,0.0) 35%,
+          rgba(6,10,18,0.5) 75%,
+          rgba(6,10,18,0.97) 100%
         );
     }
 
     /* All hero children above overlay */
-    .hero > *:not(.hero-video-bg):not(.hero-overlay) {
+    .hero > *:not(.hero-canvas-bg):not(.hero-overlay) {
       position: relative;
       z-index: 2;
     }
@@ -722,12 +716,10 @@
 <!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="hero" id="top">
 
-  <!-- Video background: Mux HLS (adaptive) with MP4 fallback -->
-  <video class="hero-video-bg" id="hero-bg-video" autoplay loop muted playsinline preload="auto">
-    <!-- HLS source set via JS below for cross-browser support -->
-    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260322_013248_a74099a8-be2b-4164-a823-eddd5e149fa1.mp4" type="video/mp4">
-  </video>
+  <!-- Particle network canvas background -->
+  <canvas class="hero-canvas-bg" id="hero-canvas"></canvas>
   <div class="hero-overlay"></div>
+
 
 
   <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:99px;padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;animation:fade-up 0.5s ease both">
@@ -1338,24 +1330,80 @@
   const chartSection = document.querySelector('.chart-card');
   if (chartSection) scoreObserver.observe(chartSection);
 
-  // ── Hero video (Mux HLS adaptive + MP4 fallback) ───────────────
+  // ── Particle Network Background ────────────────────────────────
   (function() {
-    const vid = document.getElementById('hero-bg-video');
-    if (!vid) return;
-    const HLS = 'https://stream.mux.com/BuGGTsiXq1T00WUb8qfURrHkTCbhrkfFLSv4uAOZzdhw.m3u8';
-    const MP4 = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260322_013248_a74099a8-be2b-4164-a823-eddd5e149fa1.mp4';
-    function playMp4(){ vid.src = MP4; vid.play().catch(()=>{}); }
-    if (vid.canPlayType('application/vnd.apple.mpegurl')) {
-      vid.src = HLS; vid.play().catch(()=>{});
-    } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-      const hls = new Hls({ maxBufferLength:10, enableWorker:true });
-      hls.loadSource(HLS);
-      hls.attachMedia(vid);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => vid.play().catch(()=>{}));
-      hls.on(Hls.Events.ERROR, (_,d) => { if(d.fatal){ hls.destroy(); playMp4(); } });
-    } else {
-      playMp4();
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const COLORS = ['#6366f1','#818cf8','#a78bfa','#22d3ee','#10b981','rgba(255,255,255,0.6)'];
+    const CFG = { count:85, maxDist:155, mouseR:130, speed:0.35, maxSpeed:1.4, friction:0.988 };
+    let W, H, particles;
+    const mouse = { x: null, y: null };
+    function resize() {
+      const h = canvas.parentElement;
+      W = canvas.width = h.offsetWidth;
+      H = canvas.height = h.offsetHeight;
     }
+    function mkP() {
+      const big = Math.random() < 0.14;
+      return {
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*CFG.speed, vy: (Math.random()-0.5)*CFG.speed,
+        r: big ? 2.8+Math.random()*1.8 : 0.9+Math.random()*1.4,
+        color: COLORS[Math.floor(Math.random()*COLORS.length)],
+        alpha: big ? 0.85+Math.random()*0.15 : 0.25+Math.random()*0.5,
+        glow: big
+      };
+    }
+    function init() { resize(); particles = Array.from({length:CFG.count}, mkP); }
+    function draw() {
+      ctx.clearRect(0,0,W,H);
+      for (let i=0; i<particles.length; i++) {
+        for (let j=i+1; j<particles.length; j++) {
+          const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+          const d2=dx*dx+dy*dy;
+          if (d2<CFG.maxDist*CFG.maxDist) {
+            const t=1-Math.sqrt(d2)/CFG.maxDist;
+            ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y);
+            ctx.lineTo(particles[j].x,particles[j].y);
+            ctx.strokeStyle='rgba(129,140,248,'+(t*0.28)+')';
+            ctx.lineWidth=t*0.9; ctx.stroke();
+          }
+        }
+      }
+      for (const p of particles) {
+        if (p.glow) {
+          const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
+          g.addColorStop(0,p.color); g.addColorStop(1,'transparent');
+          ctx.save(); ctx.globalAlpha=0.22;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2);
+          ctx.fillStyle=g; ctx.fill(); ctx.restore();
+        }
+        ctx.save(); ctx.globalAlpha=p.alpha;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=p.color; ctx.fill(); ctx.restore();
+      }
+    }
+    function update() {
+      for (const p of particles) {
+        if (mouse.x!==null) {
+          const dx=p.x-mouse.x, dy=p.y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
+          if (d<CFG.mouseR&&d>0) { const f=(CFG.mouseR-d)/CFG.mouseR; p.vx+=(dx/d)*f*0.5; p.vy+=(dy/d)*f*0.5; }
+        }
+        const spd=Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+        if (spd>CFG.maxSpeed){p.vx*=CFG.maxSpeed/spd; p.vy*=CFG.maxSpeed/spd;}
+        p.vx*=CFG.friction; p.vy*=CFG.friction;
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<-10) p.x=W+10; if(p.x>W+10) p.x=-10;
+        if(p.y<-10) p.y=H+10; if(p.y>H+10) p.y=-10;
+      }
+    }
+    function loop(){ draw(); update(); requestAnimationFrame(loop); }
+    window.addEventListener('resize', resize);
+    const hero=canvas.parentElement;
+    hero.addEventListener('mousemove',e=>{ const r=canvas.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
+    hero.addEventListener('mouseleave',()=>{ mouse.x=null; mouse.y=null; });
+    init(); loop();
   })();
 </script>
 
