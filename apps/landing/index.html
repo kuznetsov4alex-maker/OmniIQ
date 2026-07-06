@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -721,9 +722,9 @@
 <!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="hero" id="top">
 
-  <!-- Video background -->
-  <video class="hero-video-bg" autoplay loop muted playsinline preload="auto"
-         poster="">
+  <!-- Video background: Mux HLS (adaptive) with MP4 fallback -->
+  <video class="hero-video-bg" id="hero-bg-video" autoplay loop muted playsinline preload="auto">
+    <!-- HLS source set via JS below for cross-browser support -->
     <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260322_013248_a74099a8-be2b-4164-a823-eddd5e149fa1.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -1336,6 +1337,27 @@
   });
   const chartSection = document.querySelector('.chart-card');
   if (chartSection) scoreObserver.observe(chartSection);
+
+  // ── Hero video (Mux HLS adaptive + MP4 fallback) ───────────────
+  (function() {
+    const vid = document.getElementById('hero-bg-video');
+    if (!vid) return;
+    const HLS = 'https://stream.mux.com/BuGGTsiXq1T00WUb8qfURrHkTCbhrkfFLSv4uAOZzdhw.m3u8';
+    const MP4 = 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260322_013248_a74099a8-be2b-4164-a823-eddd5e149fa1.mp4';
+    function playMp4(){ vid.src = MP4; vid.play().catch(()=>{}); }
+    if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+      vid.src = HLS; vid.play().catch(()=>{});
+    } else if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+      const hls = new Hls({ maxBufferLength:10, enableWorker:true });
+      hls.loadSource(HLS);
+      hls.attachMedia(vid);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => vid.play().catch(()=>{}));
+      hls.on(Hls.Events.ERROR, (_,d) => { if(d.fatal){ hls.destroy(); playMp4(); } });
+    } else {
+      playMp4();
+    }
+  })();
 </script>
+
 </body>
 </html>
