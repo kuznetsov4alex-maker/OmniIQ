@@ -57,11 +57,11 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
             <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="16" y1="17" x2="22" y2="8"  stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
-              <line x1="16" y1="17" x2="26" y2="22" stroke="rgba(255,255,255,0.15)" stroke-width="0.8" stroke-linecap="round"/>
-              <line x1="16" y1="17" x2="11" y2="27" stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
-              <line x1="16" y1="17" x2="7"  y2="13" stroke="rgba(255,255,255,0.12)" stroke-width="0.7" stroke-linecap="round"/>
-              <line x1="22" y1="8"  x2="26" y2="22" stroke="rgba(255,255,255,0.08)" stroke-width="0.6" stroke-linecap="round"/>
+              <line x1="16" y1="17" x2="22" y2="8"  stroke="rgba(255,255,255,0.2)"  strokeWidth="0.9" strokeLinecap="round"/>
+              <line x1="16" y1="17" x2="26" y2="22" stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" strokeLinecap="round"/>
+              <line x1="16" y1="17" x2="11" y2="27" stroke="rgba(255,255,255,0.2)"  strokeWidth="0.9" strokeLinecap="round"/>
+              <line x1="16" y1="17" x2="7"  y2="13" stroke="rgba(255,255,255,0.12)" strokeWidth="0.7" strokeLinecap="round"/>
+              <line x1="22" y1="8"  x2="26" y2="22" stroke="rgba(255,255,255,0.08)" strokeWidth="0.6" strokeLinecap="round"/>
               <circle cx="7"  cy="13" r="1.2" fill="rgba(255,255,255,0.3)"/>
               <circle cx="26" cy="22" r="1.8" fill="#22d3ee"/>
               <circle cx="11" cy="27" r="1.7" fill="#10b981"/>
