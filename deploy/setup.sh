@@ -1,5 +1,5 @@
 #!/bin/bash
-# OmniIQ — Full server setup script for Timeweb VPS (Ubuntu 22.04)
+# OmniIQ — Full server setup script for Timeweb VPS (Ubuntu 22.04 / 24.04)
 # Usage: curl -fsSL <url> | bash
 # Or: bash setup.sh
 set -e
@@ -28,8 +28,18 @@ echo ""
 # ── 1. System update ───────────────────────────────────────────────────────
 info "Updating system packages..."
 apt update -q && apt upgrade -y -q
+
+# Detect Python version (24.04 has 3.12, 22.04 has 3.10/3.11)
+PYVER="3.12"
+if python3.12 --version &>/dev/null; then
+    PYVER="3.12"
+elif python3.11 --version &>/dev/null; then
+    PYVER="3.11"
+fi
+info "Using Python ${PYVER}"
+
 apt install -y -q curl git nginx certbot python3-certbot-nginx \
-    python3.11 python3.11-venv python3.11-dev build-essential \
+    python3 python3-venv python3-dev build-essential \
     libpq-dev postgresql postgresql-contrib ufw
 success "System packages installed"
 
@@ -41,9 +51,11 @@ success "Node.js $(node -v) installed"
 
 # ── 3. Poetry (Python package manager) ─────────────────────────────────────
 info "Installing Poetry..."
-curl -sSL https://install.python-poetry.org | python3.11 - >/dev/null
+curl -sSL https://install.python-poetry.org | python3 - >/dev/null
 export PATH="$HOME/.local/bin:$PATH"
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+# Tell poetry to use system python
+poetry config virtualenvs.prefer-active-python true
 success "Poetry $(poetry --version) installed"
 
 # ── 4. PostgreSQL ──────────────────────────────────────────────────────────
