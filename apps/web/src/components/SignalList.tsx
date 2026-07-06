@@ -17,8 +17,31 @@ function signalDot(value: number) {
   return 'dot-bad';
 }
 
-const AI_CHANNELS = ['chatgpt', 'perplexity', 'claude', 'gemini', 'copilot', 'other'];
+const AI_CHANNELS = ['alisa', 'gigachat', 'yandexgpt', 'marusia', 'chatgpt', 'other'];
 const AI_METRICS = ['mentioned', 'accurate', 'recommended', 'positive_sentiment'];
+
+const AI_CHANNEL_LABELS: Record<string, string> = {
+  alisa: 'Алиса (Яндекс)',
+  gigachat: 'GigaChat (Сбер)',
+  yandexgpt: 'YandexGPT',
+  marusia: 'Маруся (VK)',
+  chatgpt: 'ChatGPT',
+  other: 'Другой',
+};
+
+const AI_METRIC_LABELS: Record<string, string> = {
+  mentioned: 'Упоминается',
+  accurate: 'Точная информация',
+  recommended: 'Рекомендует',
+  positive_sentiment: 'Позитивная оценка',
+};
+
+const TYPE_LABELS: Record<string, string> = {
+  seo: 'Поисковая оптимизация',
+  ai: 'ИИ-ассистенты',
+  entity: 'Entity / Базы знаний',
+  reputation: 'Репутация',
+};
 
 export default function SignalList({ signals, loading, companyId, onAiSignalAdded, showToast }: Props) {
   const [showAiForm, setShowAiForm] = useState(false);
@@ -53,11 +76,11 @@ export default function SignalList({ signals, loading, companyId, onAiSignalAdde
     return (
       <div>
         <div className="empty-state">
-          <div className="empty-icon">📡</div>
-          <div className="empty-text">No signals collected yet. Click &quot;Collect Now&quot; or add an AI signal manually.</div>
+          <div className="empty-icon">◎</div>
+          <div className="empty-text">Сигналы ещё не собраны. Нажмите «Собрать сигналы» или добавьте ИИ-сигнал вручную.</div>
         </div>
         <div style={{ textAlign: 'center' }}>
-          <button className="btn btn-ghost" onClick={() => setShowAiForm(true)}>+ Add AI Signal Manually</button>
+          <button className="btn btn-ghost" onClick={() => setShowAiForm(true)}>+ Добавить ИИ-сигнал вручную</button>
         </div>
       </div>
     );
@@ -67,35 +90,35 @@ export default function SignalList({ signals, loading, companyId, onAiSignalAdde
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
         <button className="btn btn-ghost btn-sm" onClick={() => setShowAiForm(!showAiForm)}>
-          {showAiForm ? '✕ Cancel' : '+ Add AI Signal'}
+          {showAiForm ? '✕ Отмена' : '+ Добавить ИИ-сигнал'}
         </button>
       </div>
 
       {showAiForm && (
         <div className="card" style={{ marginBottom: 24 }}>
-          <div className="card-title">Add AI Visibility Signal</div>
+          <div className="card-title">Добавить ИИ-сигнал вручную</div>
           <form onSubmit={handleAddAi}>
             <div className="grid-3" style={{ gap: 12 }}>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">AI Channel</label>
+                <label className="form-label">ИИ-ассистент</label>
                 <select className="form-select" value={channel} onChange={e => setChannel(e.target.value)}>
-                  {AI_CHANNELS.map(c => <option key={c} value={c}>{c}</option>)}
+                  {AI_CHANNELS.map(c => <option key={c} value={c}>{AI_CHANNEL_LABELS[c] ?? c}</option>)}
                 </select>
               </div>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Metric</label>
+                <label className="form-label">Показатель</label>
                 <select className="form-select" value={metric} onChange={e => setMetric(e.target.value)}>
-                  {AI_METRICS.map(m => <option key={m} value={m}>{m}</option>)}
+                  {AI_METRICS.map(m => <option key={m} value={m}>{AI_METRIC_LABELS[m] ?? m}</option>)}
                 </select>
               </div>
               <div className="form-group" style={{ margin: 0 }}>
-                <label className="form-label">Value (0–1)</label>
+                <label className="form-label">Значение (0–1)</label>
                 <input className="form-input" type="number" min="0" max="1" step="0.1" value={value} onChange={e => setValue(e.target.value)} />
               </div>
             </div>
             <div style={{ marginTop: 12 }}>
               <button className="btn btn-primary btn-sm" disabled={submitting}>
-                {submitting ? <span className="spinner" /> : 'Save Signal'}
+                {submitting ? <span className="spinner" /> : 'Сохранить'}
               </button>
             </div>
           </form>
@@ -104,13 +127,13 @@ export default function SignalList({ signals, loading, companyId, onAiSignalAdde
 
       {Object.entries(grouped).map(([type, items]) => (
         <div key={type} style={{ marginBottom: 24 }}>
-          <div className="card-title" style={{ marginBottom: 10 }}>{type.toUpperCase()} Signals</div>
+          <div className="card-title" style={{ marginBottom: 10 }}>{TYPE_LABELS[type] ?? type.toUpperCase()}</div>
           {items.map(s => (
             <div key={s.id} className="signal-item">
               <div className={`signal-dot ${signalDot(s.value)}`} />
               <div className="signal-info">
                 <div className="signal-metric">{s.metric.replace(/_/g, ' ')}</div>
-                <div className="signal-channel">{s.channel} · {new Date(s.collected_at).toLocaleDateString()}</div>
+                <div className="signal-channel">{s.channel} · {new Date(s.collected_at).toLocaleDateString('ru-RU')}</div>
               </div>
               <div className="signal-value">{(s.value * 100).toFixed(0)}%</div>
             </div>

@@ -81,10 +81,10 @@ export default function Dashboard({ company, onSwitch }: Props) {
     setCollecting(true);
     try {
       await api.collectSignals(company.id);
-      showToast('Signals collected successfully');
+      showToast('Сигналы успешно собраны');
       await loadData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'Failed to collect signals', 'error');
+      showToast(e instanceof Error ? e.message : 'Не удалось собрать сигналы', 'error');
     } finally {
       setCollecting(false);
     }
@@ -94,10 +94,10 @@ export default function Dashboard({ company, onSwitch }: Props) {
     setGenerating(true);
     try {
       const res = await api.generateRecommendations(company.id) as { generated: number; message: string };
-      showToast(res.generated > 0 ? `Generated ${res.generated} recommendations` : res.message);
+      showToast(res.generated > 0 ? `Сформировано задач: ${res.generated}` : 'Нет новых задач — видимость в норме');
       await loadData();
     } catch (e: unknown) {
-      showToast(e instanceof Error ? e.message : 'Failed to generate', 'error');
+      showToast(e instanceof Error ? e.message : 'Ошибка анализа', 'error');
     } finally {
       setGenerating(false);
     }
@@ -134,17 +134,17 @@ export default function Dashboard({ company, onSwitch }: Props) {
               <div>
                 <div className="page-title">{company.name}</div>
                 <div className="page-subtitle">
-                  {company.domain || 'No domain set'} · Visibility Dashboard
+                  {company.domain || 'Домен не указан'} · Управление видимостью
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 10 }}>
                 <button className="btn btn-ghost" onClick={handleCollect} disabled={collecting}>
-                  {collecting ? <span className="spinner" /> : '📡'}
-                  {collecting ? 'Collecting…' : 'Collect Signals'}
+                  {collecting ? <span className="spinner" /> : '◎'}
+                  {collecting ? 'Собираем…' : 'Собрать сигналы'}
                 </button>
                 <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
-                  {generating ? <span className="spinner" /> : '🧠'}
-                  {generating ? 'Analyzing…' : 'Run Decision Engine'}
+                  {generating ? <span className="spinner" /> : '◈'}
+                  {generating ? 'ИИ анализирует…' : 'Запустить ИИ-анализ'}
                 </button>
               </div>
             </div>
@@ -158,23 +158,23 @@ export default function Dashboard({ company, onSwitch }: Props) {
               gap: 16, flexWrap: 'wrap',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 22 }}>{trialActive ? '🎁' : '⚡'}</span>
+                <span style={{ fontSize: 22 }}>{trialActive ? '◈' : '⚡'}</span>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>
                     {trialActive
-                      ? `Free trial: ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'} remaining`
-                      : 'Trial ended — upgrade to keep tracking daily'}
+                      ? `Бесплатный доступ: осталось ${trialDaysLeft} ${trialDaysLeft === 1 ? 'день' : trialDaysLeft < 5 ? 'дня' : 'дней'}`
+                      : 'Пробный период завершён — продолжите, чтобы не потерять позиции'}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
                     {scoreGain > 0
-                      ? `✓ Score improved +${scoreGain.toFixed(0)} pts since day 1 — you${trialActive ? "'re on the right track" : ' saw real results'}`
-                      : 'Collect signals and approve recommendations to see your score grow'}
+                      ? `✓ Индекс вырос на +${scoreGain.toFixed(0)} пт с первого дня — платформа работает`
+                      : 'Соберите сигналы и выполните задачи, чтобы увидеть рост Индекса'}
                   </div>
                 </div>
               </div>
               {(!trialActive || trialDaysLeft <= 3) && (
                 <button className="btn btn-primary btn-sm" style={{ whiteSpace: 'nowrap' }}>
-                  Upgrade — $49/mo →
+                  Продолжить за 1 490 ₽/мес →
                 </button>
               )}
             </div>
@@ -184,11 +184,11 @@ export default function Dashboard({ company, onSwitch }: Props) {
               <div className="card" style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                   <div className="card-title" style={{ margin: 0 }}>
-                    Score Trend · 7-day trial
+                    Динамика Индекса · 7 дней
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                     <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                      Day 1: <strong style={{ color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace' }}>{scoreHistory[0].score}</strong>
+                      День 1: <strong style={{ color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace' }}>{scoreHistory[0].score}</strong>
                     </span>
                     {scoreGain > 0 && (
                       <span style={{
@@ -198,7 +198,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
                         border: '1px solid rgba(16,185,129,0.25)',
                         borderRadius: 8, padding: '3px 10px',
                       }}>
-                        +{scoreGain.toFixed(0)} pts
+                        +{scoreGain.toFixed(0)} пт
                       </span>
                     )}
                   </div>
@@ -211,10 +211,10 @@ export default function Dashboard({ company, onSwitch }: Props) {
               {/* Score ring + breakdown */}
               <div className="score-ring-wrap">
                 <ScoreRing score={score?.total_score ?? 0} grade={score?.grade ?? '–'} loading={loading} />
-                <div className="score-ring-label">OmniIQ Visibility Score</div>
+                <div className="score-ring-label">Индекс видимости OmniIQ</div>
 
                 <div style={{ width: '100%', marginTop: 28 }}>
-                  <div className="card-title">Breakdown</div>
+                  <div className="card-title">Разбивка по каналам</div>
                   {score?.categories.map(cat => (
                     <div key={cat.type} className="category-bar">
                       <div className="category-row">
@@ -228,7 +228,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
                   ))}
                   {(!score || score.categories.length === 0) && (
                     <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
-                      Collect signals to see breakdown
+                      Соберите сигналы, чтобы увидеть разбивку
                     </div>
                   )}
                 </div>
@@ -236,17 +236,17 @@ export default function Dashboard({ company, onSwitch }: Props) {
 
               {/* Top recommendations */}
               <div>
-                <div className="card-title" style={{ marginBottom: 12 }}>Top Recommendations</div>
+                <div className="card-title" style={{ marginBottom: 12 }}>Приоритетные задачи</div>
                 {pendingRecs.slice(0, 3).map(rec => (
                   <RecommendationCard key={rec.id} rec={rec} onStatusUpdate={handleStatusUpdate} compact />
                 ))}
                 {pendingRecs.length === 0 && !loading && (
                   <div className="empty-state">
-                    <div className="empty-icon">🎯</div>
+                    <div className="empty-icon">◈</div>
                     <div className="empty-text">
                       {recs.length > 0
-                        ? 'All recommendations reviewed'
-                        : 'Run Decision Engine to get recommendations'}
+                        ? 'Все задачи выполнены — отличная работа!'
+                        : 'Запустите ИИ-анализ, чтобы получить план действий'}
                     </div>
                   </div>
                 )}
@@ -258,25 +258,25 @@ export default function Dashboard({ company, onSwitch }: Props) {
             <div className="grid-3">
               <div className="metric-card">
                 <div className="metric-value">{signals.length}</div>
-                <div className="metric-label">Signals collected</div>
+                <div className="metric-label">Сигналов собрано</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value">{recs.length}</div>
-                <div className="metric-label">Recommendations</div>
+                <div className="metric-label">Задач от ИИ</div>
               </div>
               <div className="metric-card">
                 <div className="metric-value" style={{ color: 'var(--emerald)' }}>
                   +{summary?.estimated_score_gain?.toFixed(0) ?? scoreGain.toFixed(0)}
                 </div>
                 <div className="metric-label">
-                  {scoreGain > 0 ? 'Points gained (trial)' : 'Potential score gain'}
+                  {scoreGain > 0 ? 'Пт роста за период' : 'Потенциал роста'}
                 </div>
               </div>
             </div>
 
             {summary?.biggest_gap && (
               <div style={{ marginTop: 16, padding: '12px 16px', background: 'rgba(99,102,241,0.08)', border: '1px solid var(--border-glow)', borderRadius: 'var(--r-md)', fontSize: 13, color: 'var(--text-secondary)' }}>
-                <span style={{ color: 'var(--accent-light)', fontWeight: 600 }}>⚡ Biggest gap: </span>
+                <span style={{ color: 'var(--accent-light)', fontWeight: 600 }}>⚡ Главная точка роста: </span>
                 {summary.biggest_gap}
               </div>
             )}
@@ -288,20 +288,20 @@ export default function Dashboard({ company, onSwitch }: Props) {
           <>
             <div className="page-header">
               <div>
-                <div className="page-title">Recommendations</div>
-                <div className="page-subtitle">Priority-sorted actions to improve visibility</div>
+                <div className="page-title">Задачи</div>
+                <div className="page-subtitle">ИИ расставил приоритеты — выполняйте, платформа остальное сделает сама</div>
               </div>
               <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
-                {generating ? <span className="spinner" /> : '🧠'}
-                {generating ? 'Analyzing…' : 'Regenerate'}
+                {generating ? <span className="spinner" /> : '◈'}
+                {generating ? 'ИИ анализирует…' : 'Обновить план'}
               </button>
             </div>
             {loading && <div className="loading-overlay"><div className="spinner" /></div>}
             {!loading && recs.length === 0 && (
               <div className="empty-state">
-                <div className="empty-icon">🧠</div>
-                <div className="empty-text">No recommendations yet. Collect signals first, then run the Decision Engine.</div>
-                <button className="btn btn-primary" onClick={handleGenerate}>Run Decision Engine</button>
+                <div className="empty-icon">◈</div>
+                <div className="empty-text">Задач пока нет. Сначала соберите сигналы, затем запустите ИИ-анализ.</div>
+                <button className="btn btn-primary" onClick={handleGenerate}>Запустить ИИ-анализ</button>
               </div>
             )}
             {recs.map(rec => (
@@ -315,12 +315,12 @@ export default function Dashboard({ company, onSwitch }: Props) {
           <>
             <div className="page-header">
               <div>
-                <div className="page-title">Signals</div>
-                <div className="page-subtitle">Raw visibility data across SEO, Entity, and AI channels</div>
+                <div className="page-title">Сигналы</div>
+                <div className="page-subtitle">Данные о вашей видимости в Яндексе, Алисе, GigaChat, 2ГИС и ещё 10+ источниках</div>
               </div>
               <button className="btn btn-ghost" onClick={handleCollect} disabled={collecting}>
-                {collecting ? <span className="spinner" /> : '📡'}
-                {collecting ? 'Collecting…' : 'Collect Now'}
+                {collecting ? <span className="spinner" /> : '◎'}
+                {collecting ? 'Собираем…' : 'Собрать сейчас'}
               </button>
             </div>
             <SignalList
@@ -338,8 +338,8 @@ export default function Dashboard({ company, onSwitch }: Props) {
           <>
             <div className="page-header">
               <div>
-                <div className="page-title">Knowledge Engine</div>
-                <div className="page-subtitle">Feed your company&apos;s brain with text, documents, and facts</div>
+                <div className="page-title">База знаний</div>
+                <div className="page-subtitle">Фундамент ИИ-продвижения — структурированные факты о вашей компании</div>
               </div>
             </div>
             <KnowledgePanel companyId={company.id} showToast={showToast} />

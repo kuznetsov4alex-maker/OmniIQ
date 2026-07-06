@@ -8,7 +8,18 @@ interface Props {
   compact?: boolean;
 }
 
-const EFFORT_LABEL: Record<string, string> = { low: '⚡ Quick win', medium: '⏱ Medium', high: '🏗 Complex' };
+const EFFORT_LABEL: Record<string, string> = {
+  low: '⚡ Быстрая победа',
+  medium: '⏱ Среднее',
+  high: '◈ Крупная задача',
+};
+
+const STATUS_LABEL: Record<string, string> = {
+  pending: 'ожидает',
+  approved: 'выполняется',
+  rejected: 'отложено',
+  done: 'готово',
+};
 
 export default function RecommendationCard({ rec, onStatusUpdate, compact }: Props) {
   const isPending = rec.status === 'pending';
@@ -23,14 +34,14 @@ export default function RecommendationCard({ rec, onStatusUpdate, compact }: Pro
       <div className="rec-meta">
         <span className={`badge badge-${rec.category}`}>{rec.category.toUpperCase()}</span>
         <span className={`badge badge-${rec.effort}`}>{EFFORT_LABEL[rec.effort] ?? rec.effort}</span>
-        <span className={`status-chip status-${rec.status}`}>{rec.status}</span>
+        <span className={`status-chip status-${rec.status}`}>{STATUS_LABEL[rec.status] ?? rec.status}</span>
       </div>
 
       <div className="rec-desc">{rec.description}</div>
 
       {!compact && rec.action_steps?.length > 0 && (
         <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Steps</div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>План действий</div>
           <ol style={{ paddingLeft: 18, color: 'var(--text-secondary)', fontSize: 13, display: 'flex', flexDirection: 'column', gap: 4 }}>
             {rec.action_steps.map((step, i) => <li key={i}>{step}</li>)}
           </ol>
@@ -40,10 +51,10 @@ export default function RecommendationCard({ rec, onStatusUpdate, compact }: Pro
       {isPending && (
         <div className="rec-actions">
           <button className="btn btn-approve btn-sm" onClick={() => onStatusUpdate(rec.id, 'approved')}>
-            ✓ Approve
+            ✓ Выполнить
           </button>
           <button className="btn btn-reject btn-sm" onClick={() => onStatusUpdate(rec.id, 'rejected')}>
-            ✗ Skip
+            ✕ Отложить
           </button>
         </div>
       )}

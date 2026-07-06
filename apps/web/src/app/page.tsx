@@ -44,7 +44,7 @@ export default function Home() {
       const c = await api.createCompany({ name: name.trim(), domain: domain.trim() || undefined });
       setSelected(c);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to create company');
+      setError(err instanceof Error ? err.message : 'Ошибка при добавлении. Попробуйте ещё раз.');
     } finally {
       setCreating(false);
     }
@@ -55,10 +55,12 @@ export default function Home() {
       <div className="setup-card">
         <div className="setup-logo">OmniIQ</div>
         <div className="setup-title">
-          {companies.length > 0 ? 'Select or Add Company' : 'Welcome to OmniIQ'}
+          {companies.length > 0 ? 'Выберите проект или добавьте новый' : 'Добро пожаловать в OmniIQ'}
         </div>
         <div className="setup-subtitle">
-          Autonomous Visibility Management — know what AI knows about your business
+          {companies.length > 0
+            ? 'Чего ждёт ваш следующий проект?'
+            : 'Первая в России платформа, которая автоматически управляет видимостью бизнеса в Яндексе, Алисе и GigaChat'}
         </div>
 
         {companies.length > 0 && (
@@ -66,30 +68,30 @@ export default function Home() {
             <div style={{ marginBottom: 16 }}>
               {companies.map(c => (
                 <button key={c.id} className="btn btn-ghost" style={{ width: '100%', marginBottom: 8, justifyContent: 'flex-start' }} onClick={() => setSelected(c)}>
-                  <span>🏢</span>
+                  <span>◈</span>
                   <span style={{ flex: 1, textAlign: 'left' }}>{c.name}</span>
                   {c.domain && <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{c.domain}</span>}
                 </button>
               ))}
             </div>
             <div className="divider" />
-            <div style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', marginBottom: 16 }}>or add a new one</div>
+            <div style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', marginBottom: 16 }}>или добавьте новый</div>
           </>
         )}
 
         <form onSubmit={handleCreate}>
           <div className="form-group">
-            <label className="form-label">Company name *</label>
-            <input className="form-input" value={name} onChange={e => setName(e.target.value)} placeholder="Acme Corp" required />
+            <label className="form-label">Название компании *</label>
+            <input className="form-input" value={name} onChange={e => setName(e.target.value)} placeholder="Например: Клиника Смайл" required />
           </div>
           <div className="form-group">
-            <label className="form-label">Website domain</label>
-            <input className="form-input" value={domain} onChange={e => setDomain(e.target.value)} placeholder="acme.com" />
+            <label className="form-label">Домен сайта</label>
+            <input className="form-input" value={domain} onChange={e => setDomain(e.target.value)} placeholder="klinika-smail.ru" />
           </div>
           {error && <div style={{ color: 'var(--rose)', fontSize: 13, marginBottom: 12 }}>{error}</div>}
           <button className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={creating}>
             {creating ? <span className="spinner" /> : '→'}
-            {creating ? 'Creating…' : 'Get Started'}
+            {creating ? 'Создаём проект…' : 'Узнать Индекс видимости →'}
           </button>
         </form>
       </div>
