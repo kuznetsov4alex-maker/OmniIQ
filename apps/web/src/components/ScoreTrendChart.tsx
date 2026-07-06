@@ -128,7 +128,7 @@ export default function ScoreTrendChart({ points, height = 160 }: Props) {
   if (points.length === 0) {
     return (
       <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', fontSize: 13 }}>
-        Collect signals daily to see your score trend
+        Собирайте сигналы ежедневно, чтобы увидеть динамику индекса
       </div>
     );
   }

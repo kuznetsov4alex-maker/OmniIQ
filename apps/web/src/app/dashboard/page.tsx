@@ -30,7 +30,7 @@ function buildScoreHistory(currentScore: number, companyCreatedAt: string): Scor
   return Array.from({ length: daysDiff }, (_, i) => {
     const s = Math.round(startScore + ((currentScore - startScore) * (i / (daysDiff - 1 || 1))));
     const g = grades[Math.min(7, Math.floor(s / 13))] || 'A';
-    const label = i === 0 ? 'Day 1' : i === daysDiff - 1 ? 'Today' : `Day ${i + 1}`;
+    const label = i === 0 ? 'День 1' : i === daysDiff - 1 ? 'Сегодня' : `День ${i + 1}`;
     return { day: label, date: new Date(start.getTime() + i * 86400000).toISOString(), score: s, grade: g };
   });
 }
@@ -110,9 +110,9 @@ export default function Dashboard({ company, onSwitch }: Props) {
     try {
       await api.updateRecommendationStatus(company.id, recId, status);
       setRecs(prev => prev.map(r => r.id === recId ? { ...r, status } : r));
-      showToast(`Recommendation ${status}`);
+      showToast(`Статус обновлен: ${status}`);
     } catch {
-      showToast('Failed to update status', 'error');
+      showToast('Не удалось обновить статус', 'error');
     }
   };
 
