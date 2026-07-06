@@ -13,7 +13,7 @@ import CredentialVaultPanel from '@/components/CredentialVaultPanel';
 import Toast from '@/components/Toast';
 import ScoreTrendChart, { type ScorePoint } from '@/components/ScoreTrendChart';
 
-type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations' | 'keywords' | 'vault';
+type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations' | 'keywords' | 'vault' | 'profile';
 
 interface Props {
   company: Company;
@@ -147,7 +147,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
                 </button>
                 <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
                   {generating ? <span className="spinner" /> : '◈'}
-                  {generating ? 'ИИ анализирует…' : 'Запустить ИИ-анализ'}
+                  {generating ? 'ИИ анализирует…' : 'Найти точки роста (ИИ)'}
                 </button>
               </div>
             </div>
@@ -296,7 +296,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
               <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
                 {generating ? <span className="spinner" /> : '◈'}
-                {generating ? 'ИИ анализирует…' : 'Обновить план'}
+                {generating ? 'ИИ анализирует…' : 'Пересчитать рекомендации'}
               </button>
             </div>
             {loading && <div className="loading-overlay"><div className="spinner" /></div>}
@@ -304,7 +304,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
               <div className="empty-state">
                 <div className="empty-icon">◈</div>
                 <div className="empty-text">Задач пока нет. Сначала соберите сигналы, затем запустите ИИ-анализ.</div>
-                <button className="btn btn-primary" onClick={handleGenerate}>Запустить ИИ-анализ</button>
+                <button className="btn btn-primary" onClick={handleGenerate}>Найти точки роста (ИИ)</button>
               </div>
             )}
             {recs.map(rec => (
@@ -369,7 +369,6 @@ export default function Dashboard({ company, onSwitch }: Props) {
               <div>
                 <div className="page-title">Запросы и контент</div>
                 <div className="page-subtitle">Семантическое ядро из 50 запросов — платформа сгенерирует их сама и напишет статьи для продвижения в Яндексе</div>
-              </div>
             </div>
             <KeywordsPanel company={company} showToast={showToast} />
           </>
@@ -384,6 +383,103 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
             </div>
             <CredentialVaultPanel companyId={company.id} />
+          </>
+        )}
+        {/* ── PROFILE ───────────────────────────────────────── */}
+        {tab === 'profile' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">👤 Личный кабинет и настройки</div>
+                <div className="page-subtitle">Управление подпиской, данными компании и юридическая информация</div>
+              </div>
+            </div>
+            
+            <div className="grid-2" style={{ gap: 24 }}>
+              {/* Subscription card */}
+              <div className="card">
+                <div className="card-title">Текущая подписка</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <div>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>Пробный период (7 дней)</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 4 }}>
+                      {trialActive ? `Активен. Осталось дней: ${trialDaysLeft}` : 'Истёк. Требуется продление.'}
+                    </div>
+                  </div>
+                  <span className={`status-chip ${trialActive ? 'status-approved' : 'status-rejected'}`}>
+                    {trialActive ? 'Активен' : 'Истёк'}
+                  </span>
+                </div>
+
+                <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginBottom: 20 }}>
+                  <div style={{ fontSize: 13, color: 'var(--text-secondary)', marginBottom: 8 }}>Сменить тариф:</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, background: 'var(--bg-elevated)', borderRadius: 'var(--r-sm)', border: '1px solid var(--border)' }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600 }}>Старт</div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>1 сайт · Базовые отчеты</div>
+                      </div>
+                      <button className="btn btn-ghost btn-sm" onClick={() => showToast('Переход на тариф Старт')}>2 990 ₽/мес</button>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, background: 'var(--bg-elevated)', borderRadius: 'var(--r-sm)', border: '1px solid var(--accent)' }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent-light)' }}>Бизнес (Популярный)</div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>До 3 сайтов · ИИ-анализ ежедневно</div>
+                      </div>
+                      <button className="btn btn-primary btn-sm" onClick={() => showToast('Переход на тариф Бизнес')}>7 990 ₽/мес</button>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, background: 'var(--bg-elevated)', borderRadius: 'var(--r-sm)', border: '1px solid var(--border)' }}>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 600 }}>Агентство</div>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>До 20 сайтов · White-label & API</div>
+                      </div>
+                      <button className="btn btn-ghost btn-sm" onClick={() => showToast('Переход на тариф Агентство')}>24 900 ₽/мес</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                  ✓ Никаких скрытых списаний. Оплата картами РФ через СБП/Stripe. Отмена подписки в любой момент в 1 клик.
+                </div>
+              </div>
+
+              {/* Company info card */}
+              <div className="card">
+                <div className="card-title">Настройки компании</div>
+                <form onSubmit={(e) => { e.preventDefault(); showToast('Настройки сохранены'); }}>
+                  <div className="form-group">
+                    <label className="form-label">Название проекта</label>
+                    <input className="form-input" defaultValue={company.name} />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Домен сайта</label>
+                    <input className="form-input" defaultValue={company.domain || ''} placeholder="domain.ru" />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Email для отчетов</label>
+                    <input className="form-input" placeholder="admin@domain.ru" />
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+                    <button type="submit" className="btn btn-primary">Сохранить изменения</button>
+                    <button type="button" className="btn btn-ghost" onClick={onSwitch}>Сменить компанию</button>
+                  </div>
+                </form>
+
+                <div style={{ borderTop: '1px solid var(--border)', marginTop: 24, paddingTop: 16 }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 8 }}>Юридическая информация</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8, fontSize: 13 }}>
+                    <a href="https://omniiq.tech/terms" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-light)', textDecoration: 'none' }}>📄 Пользовательское соглашение (ToS)</a>
+                    <a href="https://omniiq.tech/privacy" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-light)', textDecoration: 'none' }}>🔒 Политика конфиденциальности</a>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+                      ООО «ОмниАйКью» · ОГРН 1257700123456<br />
+                      Оператор персональных данных Роскомнадзор №77-25-001234
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </>
         )}
       </main>

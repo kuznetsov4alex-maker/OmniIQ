@@ -77,6 +77,15 @@ class RecommendationService:
             max_recs=request.max_recommendations,
         )
 
+        # Remove old pending recommendations to avoid duplicates
+        from sqlalchemy import delete
+        await self.db.execute(
+            delete(Recommendation).where(
+                Recommendation.company_id == company_id,
+                Recommendation.status == "pending"
+            )
+        )
+
         # Store in DB
         for rd in rec_data_list:
             rec = Recommendation(
