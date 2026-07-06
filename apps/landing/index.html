@@ -65,12 +65,37 @@
       padding: 120px 24px 80px;
       position: relative; overflow: hidden;
     }
-    .hero::before {
-      content: ''; position: absolute; top: -100px; left: 50%;
-      transform: translateX(-50%);
-      width: 900px; height: 700px;
-      background: radial-gradient(ellipse at top, rgba(99,102,241,0.14) 0%, transparent 65%);
-      pointer-events: none;
+    .hero::before { display: none; }
+
+    /* Video background */
+    .hero-video-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* Dark overlay — keeps text sharp */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(to bottom,
+          rgba(6,10,18,0.35) 0%,
+          rgba(6,10,18,0.15) 40%,
+          rgba(6,10,18,0.55) 80%,
+          rgba(6,10,18,0.95) 100%
+        );
+    }
+
+    /* All hero children above overlay */
+    .hero > *:not(.hero-video-bg):not(.hero-overlay) {
+      position: relative;
+      z-index: 2;
     }
 
     .trial-badge {
@@ -696,7 +721,14 @@
 <!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="hero" id="top">
 
-  <!-- Next-gen label -->
+  <!-- Video background -->
+  <video class="hero-video-bg" autoplay loop muted playsinline preload="auto"
+         poster="">
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260322_013248_a74099a8-be2b-4164-a823-eddd5e149fa1.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+
+
   <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:99px;padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;animation:fade-up 0.5s ease both">
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 0L8.4 5.6L14 7L8.4 8.4L7 14L5.6 8.4L0 7L5.6 5.6L7 0Z" fill="#818cf8"/></svg>
     Next-Generation Visibility Platform
