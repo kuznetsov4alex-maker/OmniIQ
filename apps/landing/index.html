@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniIQ — Know What AI Knows About Your Business</title>
+  <meta name="description" content="OmniIQ monitors how AI models and search engines perceive your business — and automatically tells you what to fix. Join the Early Bird program." />
+  <meta property="og:title" content="OmniIQ — Autonomous Visibility Management" />
+  <meta property="og:description" content="Know what AI knows about your business. Fix it automatically." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #060a12;
+      --surface:   #0c1220;
+      --elevated:  #111827;
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #6366f1;
+      --accent2:   #818cf8;
+      --cyan:      #22d3ee;
+      --emerald:   #10b981;
+      --rose:      #f43f5e;
+      --amber:     #f59e0b;
+      --text:      #f1f5f9;
+      --muted:     #94a3b8;
+      --dimmed:    #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ───────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(6,10,18,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6366f1, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-cta:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse at top, rgba(99,102,241,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at bottom, rgba(34,211,238,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 99px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent2);
+      margin-bottom: 32px;
+      animation: fade-up 0.6s ease both;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: clamp(40px, 6vw, 76px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fade-up 0.6s 0.1s ease both;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #22d3ee 50%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+      animation: fade-up 0.6s 0.2s ease both;
+    }
+
+    /* ── Waitlist form ─────────────────────────────────────── */
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto 20px;
+      animation: fade-up 0.6s 0.3s ease both;
+    }
+
+    .waitlist-input {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .waitlist-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+
+    .waitlist-input::placeholder { color: var(--dimmed); }
+
+    .btn-hero {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(99,102,241,0.4); }
+    .btn-hero:hover::after { opacity: 1; }
+    .btn-hero:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .hero-note {
+      font-size: 13px;
+      color: var(--dimmed);
+      animation: fade-up 0.6s 0.4s ease both;
+    }
+
+    .hero-note strong { color: var(--amber); }
+
+    /* ── Stats strip ───────────────────────────────────────── */
+    .stats-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat { text-align: center; }
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -1px;
+    }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Problem section ───────────────────────────────────── */
+    .section {
+      padding: 100px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── Problem cards ─────────────────────────────────────── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .problem-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .problem-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .problem-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+
+    .problem-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .problem-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── How it works ──────────────────────────────────────── */
+    .how-section {
+      padding: 100px 48px;
+      background: var(--surface);
+    }
+
+    .how-inner { max-width: 1200px; margin: 0 auto; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    .step-card {
+      position: relative;
+      padding: 28px;
+    }
+
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 20px;
+    }
+
+    .step-1 .step-num { background: rgba(99,102,241,0.15); color: var(--accent2); border: 1px solid rgba(99,102,241,0.3); }
+    .step-2 .step-num { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+    .step-3 .step-num { background: rgba(16,185,129,0.15); color: var(--emerald); border: 1px solid rgba(16,185,129,0.3); }
+    .step-4 .step-num { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+
+    .step-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+    .step-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── Score preview ─────────────────────────────────────── */
+    .score-preview {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 48px;
+    }
+
+    .preview-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 64px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preview-card::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .score-mock {
+      text-align: center;
+      position: relative;
+    }
+
+    .score-circle {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: conic-gradient(#6366f1 0% 72%, rgba(255,255,255,0.06) 72% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+
+    .score-circle::after {
+      content: '';
+      position: absolute;
+      inset: 14px;
+      background: var(--surface);
+      border-radius: 50%;
+    }
+
+    .score-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .score-num {
+      font-size: 42px;
+      font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent2);
+      letter-spacing: -2px;
+      line-height: 1;
+    }
+
+    .score-grade {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .score-tag {
+      display: inline-block;
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 99px;
+      padding: 4px 14px;
+      font-size: 13px;
+      color: var(--accent2);
+    }
+
+    .preview-bars { display: flex; flex-direction: column; gap: 20px; }
+
+    .prev-bar-row { display: flex; flex-direction: column; gap: 8px; }
+    .prev-bar-label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+    .prev-bar-label span:last-child { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text); }
+    .prev-bar-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+    .prev-bar-fill { height: 100%; border-radius: 99px; }
+    .fill-seo    { width: 65%; background: linear-gradient(90deg, #6366f1, #818cf8); }
+    .fill-ai     { width: 31%; background: linear-gradient(90deg, #22d3ee, #67e8f9); }
+    .fill-entity { width: 40%; background: linear-gradient(90deg, #10b981, #34d399); }
+    .fill-rep    { width: 55%; background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+    .recs-preview { margin-top: 32px; }
+    .rec-preview-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(99,102,241,0.05);
+      border: 1px solid rgba(99,102,241,0.15);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .rec-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .dot-critical { background: var(--rose); box-shadow: 0 0 6px var(--rose); }
+    .dot-high     { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+    .dot-medium   { background: var(--accent2); box-shadow: 0 0 6px var(--accent2); }
+    .rec-preview-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .rec-preview-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+
+    /* ── Pricing ───────────────────────────────────────────── */
+    .pricing-section {
+      background: var(--surface);
+      padding: 100px 48px;
+    }
+
+    .pricing-inner { max-width: 1000px; margin: 0 auto; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .pricing-card {
+      background: var(--elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .pricing-card:hover { transform: translateY(-4px); }
+
+    .pricing-card.featured {
+      border-color: rgba(99,102,241,0.4);
+      background: linear-gradient(160deg, rgba(99,102,241,0.08), var(--elevated));
+    }
+
+    .pricing-card.featured::before {
+      content: '🔥 Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+
+    .plan-name { font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .plan-price { font-size: 44px; font-weight: 900; letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
+    .plan-price sup { font-size: 22px; letter-spacing: 0; vertical-align: top; margin-top: 10px; display: inline-block; }
+    .plan-period { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .plan-features li {
+      font-size: 14px;
+      color: var(--muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      color: var(--emerald);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .plan-features li.disabled { opacity: 0.35; }
+    .plan-features li.disabled::before { content: '✕'; color: var(--dimmed); }
+
+    .btn-plan {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+
+    .btn-plan-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-plan-ghost:hover { background: rgba(255,255,255,0.05); }
+
+    .btn-plan-primary { background: var(--accent); color: white; }
+    .btn-plan-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    .early-bird-banner {
+      background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(99,102,241,0.1));
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 16px;
+      padding: 24px 32px;
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .early-bird-text { font-size: 16px; font-weight: 600; }
+    .early-bird-sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+    /* ── Comparison vs Yext ────────────────────────────────── */
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 48px;
+      font-size: 14px;
+    }
+
+    .vs-table th {
+      text-align: left;
+      padding: 12px 20px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--dimmed);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .vs-table th:not(:first-child) { text-align: center; }
+
+    .vs-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .vs-table td:not(:first-child) { text-align: center; }
+    .vs-table td:first-child { font-weight: 500; color: var(--text); }
+
+    .vs-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+    .check { color: var(--emerald); font-weight: 700; font-size: 16px; }
+    .cross { color: var(--dimmed); font-size: 16px; }
+    .col-omniiq { color: var(--accent2); font-weight: 700; }
+
+    /* ── Testimonials ──────────────────────────────────────── */
+    .testimonials-section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+
+    .testimonial-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+
+    .testimonial-text {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    .author-name { font-size: 14px; font-weight: 600; }
+    .author-role { font-size: 12px; color: var(--dimmed); }
+
+    /* ── CTA final ─────────────────────────────────────────── */
+    .cta-final {
+      padding: 120px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-final::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%);
+    }
+
+    .cta-final h2 { font-size: clamp(32px, 5vw, 60px); font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; position: relative; }
+    .cta-final p { font-size: 18px; color: var(--muted); max-width: 480px; margin: 0 auto 40px; position: relative; }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo { font-size: 18px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 13px; color: var(--dimmed); text-decoration: none; }
+    .footer-links a:hover { color: var(--muted); }
+    .footer-copy { font-size: 12px; color: var(--dimmed); }
+
+    /* ── Animations ────────────────────────────────────────── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Toast ─────────────────────────────────────────────── */
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 24px; right: 24px;
+      background: var(--elevated);
+      border: 1px solid rgba(16,185,129,0.4);
+      border-left: 3px solid var(--emerald);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 1000;
+      animation: slide-up 0.3s ease;
+    }
+
+    @keyframes slide-up { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .problem-grid, .steps-grid, .pricing-grid, .testimonials-grid { grid-template-columns: 1fr; }
+      .preview-card { grid-template-columns: 1fr; }
+      .section, .score-preview, .testimonials-section, .pricing-section { padding: 60px 24px; }
+      .how-section { padding: 60px 24px; }
+      .stats-strip { gap: 32px; padding: 32px 24px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ────────────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo">OmniIQ</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#compare">vs Yext</a>
+    </div>
+    <a href="#waitlist" class="nav-cta">Get Early Access →</a>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────── -->
+  <section class="hero" id="top">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Now in private beta · 47 spots left
+    </div>
+
+    <h1>
+      Know what AI<br/>
+      knows about<br/>
+      <span class="gradient-text">your business.</span>
+    </h1>
+
+    <p class="hero-sub">
+      OmniIQ monitors how ChatGPT, Perplexity, Google and every major AI model
+      perceives your company — and automatically tells you what to fix.
+    </p>
+
+    <form class="waitlist-form" id="waitlist-form" onsubmit="handleWaitlist(event)">
+      <input
+        type="email"
+        class="waitlist-input"
+        placeholder="your@email.com"
+        id="email-input"
+        required
+        autocomplete="email"
+      />
+      <button type="submit" class="btn-hero" id="submit-btn">
+        Get Early Access
+      </button>
+    </form>
+
+    <div class="hero-note">
+      🔥 <strong>Early Bird: 50% off</strong> for first 100 customers · No credit card required
+    </div>
+  </section>
+
+  <!-- ── Stats ──────────────────────────────────────────────── -->
+  <div class="stats-strip">
+    <div class="stat">
+      <div class="stat-value">72%</div>
+      <div class="stat-label">of buying decisions start with AI queries</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">3x</div>
+      <div class="stat-label">more visibility with structured entity data</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">48h</div>
+      <div class="stat-label">average time to first improvement</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">A→F</div>
+      <div class="stat-label">clear visibility grade for every business</div>
+    </div>
+  </div>
+
+  <!-- ── Problem ────────────────────────────────────────────── -->
+  <section class="section fade-in" id="problem">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">
+      AI is replacing search.<br/>
+      Your business is invisible.
+    </h2>
+    <p class="section-sub">
+      When someone asks ChatGPT "best [your category] in [your city]" — are you mentioned?
+      If not, you're losing customers you don't even know exist.
+    </p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">🤖</div>
+        <div class="problem-title">AI doesn't know you</div>
+        <div class="problem-text">ChatGPT, Perplexity, Gemini and others train on structured data. If you're not in Wikidata, Wikipedia, or structured business directories — AI will recommend your competitors instead.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌐</div>
+        <div class="problem-title">SEO isn't enough anymore</div>
+        <div class="problem-text">Classic SEO optimizes for Google's 10 blue links. But AI-powered search doesn't work that way — it synthesizes knowledge. You need a different strategy.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <div class="problem-title">No visibility into your visibility</div>
+        <div class="problem-text">You can check your Google ranking. But how do you know what ChatGPT says about you? What does Perplexity recommend? There's been no tool for this — until now.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How it works ───────────────────────────────────────── -->
+  <section class="how-section" id="how">
+    <div class="how-inner">
+      <div class="section-label fade-in">How It Works</div>
+      <h2 class="section-title fade-in">
+        Four engines.<br/>
+        One visibility score.
+      </h2>
+
+      <div class="steps-grid">
+        <div class="step-card step-1 fade-in">
+          <div class="step-num">01</div>
+          <div class="step-title">Knowledge Engine</div>
+          <div class="step-text">Feed OmniIQ your company info — website text, press releases, product descriptions. We chunk, embed, and extract entities to build your Company Brain.</div>
+        </div>
+        <div class="step-card step-2 fade-in">
+          <div class="step-num">02</div>
+          <div class="step-title">Signal Engine</div>
+          <div class="step-text">We monitor your SEO health, entity presence across Wikidata/Wikipedia, and how AI models mention your brand. All signals flow into a live dashboard.</div>
+        </div>
+        <div class="step-card step-3 fade-in">
+          <div class="step-num">03</div>
+          <div class="step-title">Decision Engine</div>
+          <div class="step-text">GPT-4o analyzes your gaps — what's missing, what's wrong, what will have the highest impact. You get a prioritized action list scored by potential improvement.</div>
+        </div>
+        <div class="step-card step-4 fade-in">
+          <div class="step-num">04</div>
+          <div class="step-title">Execution Engine</div>
+          <div class="step-text">Approve a recommendation. OmniIQ tracks its implementation, measures the score impact, and learns what works for your industry. The loop closes itself.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Dashboard preview ──────────────────────────────────── -->
+  <div class="score-preview fade-in">
+    <div class="section-label">Live Product</div>
+    <h2 class="section-title" style="margin-bottom: 40px">Your visibility, in one number</h2>
+
+    <div class="preview-card">
+      <div class="score-mock">
+        <div class="score-circle">
+          <div class="score-inner">
+            <div class="score-num">72</div>
+            <div class="score-grade">Grade: C</div>
+          </div>
+        </div>
+        <div class="score-tag">OmniIQ Score</div>
+      </div>
+
+      <div>
+        <div class="preview-bars">
+          <div class="prev-bar-row">
+            <div class="prev-bar-label"><span>SEO Health</span><span>65/100</span></div>
+            <div class="prev-bar-track"><div class="prev-bar-fill fill-seo"></div></div>
+          </div>
+          <div class="prev-bar-row">
+            <div class="prev-bar-label"><span>AI Visibility</span><span>31/100</span></div>
+            <div class="prev-bar-track"><div class="prev-bar-fill fill-ai"></div></div>
+          </div>
+          <div class="prev-bar-row">
+            <div class="prev-bar-label"><span>Entity Presence</span><span>40/100</span></div>
+            <div class="prev-bar-track"><div class="prev-bar-fill fill-entity"></div></div>
+          </div>
+          <div class="prev-bar-row">
+            <div class="prev-bar-label"><span>Reputation</span><span>55/100</span></div>
+            <div class="prev-bar-track"><div class="prev-bar-fill fill-rep"></div></div>
+          </div>
+        </div>
+
+        <div class="recs-preview">
+          <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--dimmed); margin-bottom: 12px;">Top Recommendations</div>
+          <div class="rec-preview-item">
+            <div class="rec-dot dot-critical"></div>
+            <div>
+              <div class="rec-preview-title">Create a Wikidata entry for your company</div>
+              <div class="rec-preview-text">Impact +8.5 · Effort: Low · AI systems use Wikidata as primary fact source</div>
+            </div>
+          </div>
+          <div class="rec-preview-item">
+            <div class="rec-dot dot-high"></div>
+            <div>
+              <div class="rec-preview-title">Add sitemap.xml and submit to Google Search Console</div>
+              <div class="rec-preview-text">Impact +7.0 · Effort: Low · Search engines may miss important pages</div>
+            </div>
+          </div>
+          <div class="rec-preview-item">
+            <div class="rec-dot dot-medium"></div>
+            <div>
+              <div class="rec-preview-title">Measure your AI visibility baseline in 3 models</div>
+              <div class="rec-preview-text">Impact +6.0 · Effort: Low · No AI signal data collected yet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Comparison ─────────────────────────────────────────── -->
+  <section class="section fade-in" id="compare">
+    <div class="section-label">vs Competitors</div>
+    <h2 class="section-title">OmniIQ vs Yext vs doing it manually</h2>
+
+    <table class="vs-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="col-omniiq">OmniIQ</th>
+          <th>Yext</th>
+          <th>Manual</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>AI visibility monitoring (ChatGPT, Perplexity…)</td><td><span class="check col-omniiq">✓</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+        <tr><td>Automated gap analysis</td><td><span class="check col-omniiq">✓</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+        <tr><td>GPT-4o decision recommendations</td><td><span class="check col-omniiq">✓</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+        <tr><td>Visibility score (0–100 + grade)</td><td><span class="check col-omniiq">✓</span></td><td><span class="cross">Partial</span></td><td><span class="cross">✕</span></td></tr>
+        <tr><td>SEO & Entity signal collection</td><td><span class="check col-omniiq">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✕</span></td></tr>
+        <tr><td>Price for 1 company</td><td class="col-omniiq" style="font-weight: 700;">$49/mo</td><td>$499+/mo</td><td>$0 (but 40h/mo)</td></tr>
+        <tr><td>Setup time</td><td class="col-omniiq" style="font-weight: 700;">5 minutes</td><td>Weeks + sales call</td><td>Ongoing</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── Testimonials ───────────────────────────────────────── -->
+  <section class="testimonials-section fade-in">
+    <div class="section-label">Early Beta Users</div>
+    <h2 class="section-title">What people are saying</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-text">"I had no idea ChatGPT didn't know my company existed. OmniIQ found the gap in 2 minutes and told me exactly how to fix it. Grade went from F to C in a week."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">М</div>
+          <div>
+            <div class="author-name">Mikhail R.</div>
+            <div class="author-role">Founder, B2B SaaS</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"We were paying $800/mo for Yext and still had no visibility into AI search. OmniIQ costs a tenth of that and actually tells us what to do, not just what's wrong."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div>
+            <div class="author-name">Sarah K.</div>
+            <div class="author-role">Head of Marketing, Retail</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-text">"The Wikidata recommendation alone was worth it. After creating our entity page, we started showing up in Perplexity answers within days. Incredible ROI."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">А</div>
+          <div>
+            <div class="author-name">Alex D.</div>
+            <div class="author-role">SEO Lead, E-commerce</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pricing ────────────────────────────────────────────── -->
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-inner">
+      <div class="section-label fade-in">Pricing</div>
+      <h2 class="section-title fade-in">Simple, honest pricing</h2>
+
+      <div class="pricing-grid">
+        <!-- Starter -->
+        <div class="pricing-card fade-in">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price"><sup>$</sup>0</div>
+          <div class="plan-period">Free forever</div>
+          <ul class="plan-features">
+            <li>1 company</li>
+            <li>SEO signal collection</li>
+            <li>Basic Visibility Score</li>
+            <li>5 recommendations/month</li>
+            <li class="disabled">AI visibility monitoring</li>
+            <li class="disabled">Entity tracking</li>
+            <li class="disabled">Decision Engine</li>
+          </ul>
+          <a href="#waitlist" class="btn-plan btn-plan-ghost">Start Free</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card featured fade-in">
+          <div class="plan-name">Pro</div>
+          <div class="plan-price"><sup>$</sup>49</div>
+          <div class="plan-period">per month · <strong style="color: var(--amber)">$24 Early Bird 🔥</strong></div>
+          <ul class="plan-features">
+            <li>5 companies</li>
+            <li>All signal collectors</li>
+            <li>Full Visibility Score (A–F)</li>
+            <li>Unlimited recommendations</li>
+            <li>AI visibility monitoring</li>
+            <li>Entity tracking (Wikidata, Wiki)</li>
+            <li>Decision Engine (GPT-4o)</li>
+          </ul>
+          <a href="#waitlist" class="btn-plan btn-plan-primary" id="early-bird-btn">Get Early Bird Access →</a>
+        </div>
+
+        <!-- Agency -->
+        <div class="pricing-card fade-in">
+          <div class="plan-name">Agency</div>
+          <div class="plan-price"><sup>$</sup>199</div>
+          <div class="plan-period">per month</div>
+          <ul class="plan-features">
+            <li>Unlimited companies</li>
+            <li>White-label reports</li>
+            <li>API access</li>
+            <li>Priority support</li>
+            <li>Custom signal collectors</li>
+            <li>Team seats (5 users)</li>
+            <li>Dedicated onboarding</li>
+          </ul>
+          <a href="mailto:hello@omniiq.tech" class="btn-plan btn-plan-ghost">Contact Us</a>
+        </div>
+      </div>
+
+      <div class="early-bird-banner fade-in">
+        <div>
+          <div class="early-bird-text">🔥 Early Bird: 50% off Pro for first 100 customers</div>
+          <div class="early-bird-sub">Lock in $24/mo forever. Price goes up to $49 after launch.</div>
+        </div>
+        <a href="#waitlist" class="btn-hero" style="text-decoration: none; padding: 12px 28px;">Claim Discount →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ───────────────────────────────────────────── -->
+  <section class="cta-final" id="waitlist">
+    <h2>Stop being invisible<br/>to AI. <span class="gradient-text">Start today.</span></h2>
+    <p>Join 200+ businesses already on the waitlist. First 100 get 50% off forever.</p>
+
+    <form class="waitlist-form" style="margin: 0 auto 16px" onsubmit="handleWaitlist(event)">
+      <input type="email" class="waitlist-input" placeholder="your@email.com" required autocomplete="email" />
+      <button type="submit" class="btn-hero">Get Early Access</button>
+    </form>
+    <div class="hero-note">No spam. No credit card. Just early access.</div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────── -->
+  <footer>
+    <div class="footer-logo">OmniIQ</div>
+    <div class="footer-links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="mailto:hello@omniiq.tech">Contact</a>
+      <a href="#">Privacy</a>
+    </div>
+    <div class="footer-copy">© 2025 OmniIQ · hello@omniiq.tech</div>
+  </footer>
+
+  <div id="toast">✓ You're on the waitlist! We'll be in touch soon.</div>
+
+  <script>
+    // ── Scroll animations ────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // ── Waitlist form ────────────────────────────────────────
+    function handleWaitlist(e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value;
+      const btn = e.target.querySelector('button[type="submit"]');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Submitting…';
+      }
+
+      // TODO: replace with your actual endpoint (Airtable / Supabase / ConvertKit)
+      fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .catch(() => {}) // fail silently in demo
+      .finally(() => {
+        e.target.reset();
+        if (btn) { btn.disabled = false; btn.textContent = 'Get Early Access'; }
+        showToast();
+      });
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+
+    // ── Nav scroll effect ─────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.style.background = window.scrollY > 50
+        ? 'rgba(6,10,18,0.95)'
+        : 'rgba(6,10,18,0.8)';
+    });
+
+    // ── Animate score counter ─────────────────────────────────
+    const scoreEl = document.querySelector('.score-num');
+    if (scoreEl) {
+      const target = 72;
+      let current = 0;
+      const step = () => {
+        current = Math.min(current + 2, target);
+        scoreEl.textContent = current;
+        if (current < target) requestAnimationFrame(step);
+      };
+      const scoreObserver = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { step(); scoreObserver.disconnect(); }
+      });
+      scoreObserver.observe(scoreEl);
+    }
+  </script>
+</body>
+</html>
