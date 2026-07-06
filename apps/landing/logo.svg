@@ -1,0 +1,61 @@
+<svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow-center" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-s" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ── Icon: asymmetric 5-node cluster ── -->
+  <!-- Node positions:
+       C = center    (18, 20)  large  indigo
+       T = top       (24, 9)   medium violet
+       R = right     (32, 25)  small  cyan
+       B = bottom    (14, 31)  medium emerald
+       L = top-left  (9,  14)  small  muted
+  -->
+
+  <!-- Connectors (draw first, behind nodes) -->
+  <line x1="18" y1="20" x2="24" y2="9"  stroke="rgba(255,255,255,0.18)" stroke-width="1"   stroke-linecap="round"/>
+  <line x1="18" y1="20" x2="32" y2="25" stroke="rgba(255,255,255,0.15)" stroke-width="0.9" stroke-linecap="round"/>
+  <line x1="18" y1="20" x2="14" y2="31" stroke="rgba(255,255,255,0.18)" stroke-width="1"   stroke-linecap="round"/>
+  <line x1="18" y1="20" x2="9"  y2="14" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" stroke-linecap="round"/>
+  <line x1="24" y1="9"  x2="32" y2="25" stroke="rgba(255,255,255,0.08)" stroke-width="0.7" stroke-linecap="round"/>
+
+  <!-- L: top-left — small, muted -->
+  <circle cx="9"  cy="14" r="1.5" fill="rgba(255,255,255,0.35)"/>
+
+  <!-- R: right — small, cyan -->
+  <circle cx="32" cy="25" r="2"   fill="#22d3ee" filter="url(#glow-s)"/>
+
+  <!-- B: bottom — medium, emerald -->
+  <circle cx="14" cy="31" r="2.5" fill="rgba(16,185,129,0.18)"/>
+  <circle cx="14" cy="31" r="2"   fill="#10b981" filter="url(#glow-s)"/>
+
+  <!-- T: top — medium, violet -->
+  <circle cx="24" cy="9"  r="3"   fill="rgba(129,140,248,0.15)"/>
+  <circle cx="24" cy="9"  r="2"   fill="#818cf8" filter="url(#glow-s)"/>
+
+  <!-- C: center — large, indigo (dominant) -->
+  <circle cx="18" cy="20" r="5.5" fill="rgba(99,102,241,0.18)"/>
+  <circle cx="18" cy="20" r="3.5" fill="#6366f1"  filter="url(#glow-center)"/>
+
+  <!-- ── Wordmark ── -->
+  <!-- "Omni" thin, "IQ" black — using system font stack since SVG embeds -->
+  <text x="46" y="26"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-weight="300"
+        font-size="19"
+        letter-spacing="-0.4"
+        fill="rgba(255,255,255,0.92)">Omni</text>
+  <text x="95" y="26"
+        font-family="Inter, 'Helvetica Neue', Arial, sans-serif"
+        font-weight="900"
+        font-size="19"
+        letter-spacing="-0.8"
+        fill="#ffffff">IQ</text>
+</svg>

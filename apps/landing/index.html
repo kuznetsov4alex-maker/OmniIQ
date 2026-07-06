@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -662,7 +663,28 @@
 
 <!-- ── Nav ────────────────────────────────────────────────────── -->
 <nav id="nav">
-  <a href="#top" class="nav-logo">OmniIQ</a>
+  <a href="#top" class="nav-logo" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none">
+    <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="lgc" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="lgs" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <line x1="16" y1="17" x2="22" y2="8"  stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="26" y2="22" stroke="rgba(255,255,255,0.15)" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="11" y2="27" stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="7"  y2="13" stroke="rgba(255,255,255,0.12)" stroke-width="0.7" stroke-linecap="round"/>
+      <line x1="22" y1="8"  x2="26" y2="22" stroke="rgba(255,255,255,0.08)" stroke-width="0.6" stroke-linecap="round"/>
+      <circle cx="7"  cy="13" r="1.2" fill="rgba(255,255,255,0.3)"/>
+      <circle cx="26" cy="22" r="1.8" fill="#22d3ee" filter="url(#lgs)"/>
+      <circle cx="11" cy="27" r="2.2" fill="rgba(16,185,129,0.15)"/>
+      <circle cx="11" cy="27" r="1.7" fill="#10b981" filter="url(#lgs)"/>
+      <circle cx="22" cy="8"  r="2.5" fill="rgba(129,140,248,0.15)"/>
+      <circle cx="22" cy="8"  r="1.8" fill="#818cf8" filter="url(#lgs)"/>
+      <circle cx="16" cy="17" r="4.5" fill="rgba(99,102,241,0.2)"/>
+      <circle cx="16" cy="17" r="3"   fill="#6366f1" filter="url(#lgc)"/>
+    </svg>
+    <span style="font-family:'Inter',sans-serif;font-size:17px;line-height:1"><span style="font-weight:300;color:rgba(255,255,255,0.9)">Omni</span><span style="font-weight:900;color:#fff">IQ</span></span>
+  </a>
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
@@ -1199,7 +1221,22 @@
 
 <!-- ── Footer ─────────────────────────────────────────────────── -->
 <footer>
-  <div class="f-logo">OmniIQ</div>
+  <div class="f-logo" style="display:inline-flex;align-items:center;gap:9px">
+    <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="16" y1="17" x2="22" y2="8"  stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="26" y2="22" stroke="rgba(255,255,255,0.15)" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="11" y2="27" stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="16" y1="17" x2="7"  y2="13" stroke="rgba(255,255,255,0.12)" stroke-width="0.7" stroke-linecap="round"/>
+      <line x1="22" y1="8"  x2="26" y2="22" stroke="rgba(255,255,255,0.08)" stroke-width="0.6" stroke-linecap="round"/>
+      <circle cx="7"  cy="13" r="1.2" fill="rgba(255,255,255,0.3)"/>
+      <circle cx="26" cy="22" r="1.8" fill="#22d3ee"/>
+      <circle cx="11" cy="27" r="1.7" fill="#10b981"/>
+      <circle cx="22" cy="8"  r="1.8" fill="#818cf8"/>
+      <circle cx="16" cy="17" r="4.5" fill="rgba(99,102,241,0.2)"/>
+      <circle cx="16" cy="17" r="3"   fill="#6366f1"/>
+    </svg>
+    <span style="font-family:'Inter',sans-serif;font-size:16px"><span style="font-weight:300;color:rgba(255,255,255,0.75)">Omni</span><span style="font-weight:900;color:rgba(255,255,255,0.9)">IQ</span></span>
+  </div>
   <div class="f-links">
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
@@ -1209,7 +1246,7 @@
   <div class="f-copy">© 2025 OmniIQ · hello@omniiq.tech</div>
 </footer>
 
-<div id="toast">🎉 Scanning your domain… check your email in 60 seconds!</div>
+<div id="toast">Scanning your domain… check your email in 60 seconds!</div>
 
 <script>
   // ── Scroll reveal ─────────────────────────────────────────────
