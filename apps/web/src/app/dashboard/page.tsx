@@ -1,0 +1,267 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import { api, type Company, type VisibilityScore, type Recommendation, type RecommendationSummary, type Signal } from '@/lib/api';
+import Sidebar from '@/components/Sidebar';
+import ScoreRing from '@/components/ScoreRing';
+import RecommendationCard from '@/components/RecommendationCard';
+import SignalList from '@/components/SignalList';
+import KnowledgePanel from '@/components/KnowledgePanel';
+import Toast from '@/components/Toast';
+
+type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge';
+
+interface Props {
+  company: Company;
+  onSwitch: () => void;
+}
+
+export default function Dashboard({ company, onSwitch }: Props) {
+  const [tab, setTab] = useState<Tab>('overview');
+  const [score, setScore] = useState<VisibilityScore | null>(null);
+  const [summary, setSummary] = useState<RecommendationSummary | null>(null);
+  const [recs, setRecs] = useState<Recommendation[]>([]);
+  const [signals, setSignals] = useState<Signal[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [collecting, setCollecting] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+
+  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [scoreData, summaryData, recsData, signalsData] = await Promise.allSettled([
+        api.getVisibilityScore(company.id),
+        api.getSummary(company.id),
+        api.listRecommendations(company.id),
+        api.listSignals(company.id),
+      ]);
+      if (scoreData.status === 'fulfilled') setScore(scoreData.value);
+      if (summaryData.status === 'fulfilled') setSummary(summaryData.value);
+      if (recsData.status === 'fulfilled') setRecs(recsData.value.items);
+      if (signalsData.status === 'fulfilled') setSignals(signalsData.value.items);
+    } finally {
+      setLoading(false);
+    }
+  }, [company.id]);
+
+  useEffect(() => { loadData(); }, [loadData]);
+
+  const handleCollect = async () => {
+    setCollecting(true);
+    try {
+      await api.collectSignals(company.id);
+      showToast('Signals collected successfully');
+      await loadData();
+    } catch (e: unknown) {
+      showToast(e instanceof Error ? e.message : 'Failed to collect signals', 'error');
+    } finally {
+      setCollecting(false);
+    }
+  };
+
+  const handleGenerate = async () => {
+    setGenerating(true);
+    try {
+      const res = await api.generateRecommendations(company.id) as { generated: number; message: string };
+      showToast(res.generated > 0 ? `Generated ${res.generated} recommendations` : res.message);
+      await loadData();
+    } catch (e: unknown) {
+      showToast(e instanceof Error ? e.message : 'Failed to generate', 'error');
+    } finally {
+      setGenerating(false);
+    }
+  };
+
+  const handleStatusUpdate = async (recId: string, status: string) => {
+    try {
+      await api.updateRecommendationStatus(company.id, recId, status);
+      setRecs(prev => prev.map(r => r.id === recId ? { ...r, status } : r));
+      showToast(`Recommendation ${status}`);
+    } catch {
+      showToast('Failed to update status', 'error');
+    }
+  };
+
+  const pendingRecs = recs.filter(r => r.status === 'pending');
+
+  return (
+    <div className="layout">
+      <Sidebar
+        company={company}
+        activeTab={tab}
+        onTabChange={(t) => setTab(t as Tab)}
+        onSwitch={onSwitch}
+        pendingCount={pendingRecs.length}
+      />
+
+      <main className="main">
+        {/* ── OVERVIEW ──────────────────────────────────────── */}
+        {tab === 'overview' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">{company.name}</div>
+                <div className="page-subtitle">
+                  {company.domain || 'No domain set'} · Visibility Dashboard
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button className="btn btn-ghost" onClick={handleCollect} disabled={collecting}>
+                  {collecting ? <span className="spinner" /> : '📡'}
+                  {collecting ? 'Collecting…' : 'Collect Signals'}
+                </button>
+                <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
+                  {generating ? <span className="spinner" /> : '🧠'}
+                  {generating ? 'Analyzing…' : 'Run Decision Engine'}
+                </button>
+              </div>
+            </div>
+
+            <div className="grid-main" style={{ marginBottom: 24 }}>
+              {/* Score ring */}
+              <div className="score-ring-wrap">
+                <ScoreRing score={score?.total_score ?? 0} grade={score?.grade ?? '–'} loading={loading} />
+                <div className="score-ring-label">OmniIQ Visibility Score</div>
+
+                <div style={{ width: '100%', marginTop: 28 }}>
+                  <div className="card-title">Breakdown</div>
+                  {score?.categories.map(cat => (
+                    <div key={cat.type} className="category-bar">
+                      <div className="category-row">
+                        <span className="category-name">{cat.type.toUpperCase()}</span>
+                        <span className="category-score">{cat.score.toFixed(0)}</span>
+                      </div>
+                      <div className="bar-track">
+                        <div className={`bar-fill bar-${cat.type}`} style={{ width: `${cat.score}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                  {(!score || score.categories.length === 0) && (
+                    <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
+                      Collect signals to see breakdown
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Top recommendations */}
+              <div>
+                <div className="card-title" style={{ marginBottom: 12 }}>Top Recommendations</div>
+                {pendingRecs.slice(0, 3).map(rec => (
+                  <RecommendationCard key={rec.id} rec={rec} onStatusUpdate={handleStatusUpdate} compact />
+                ))}
+                {pendingRecs.length === 0 && !loading && (
+                  <div className="empty-state">
+                    <div className="empty-icon">🎯</div>
+                    <div className="empty-text">
+                      {recs.length > 0
+                        ? 'All recommendations reviewed'
+                        : 'Run Decision Engine to get recommendations'}
+                    </div>
+                  </div>
+                )}
+                {loading && <div className="loading-overlay"><div className="spinner" /></div>}
+              </div>
+            </div>
+
+            {/* Metric strip */}
+            <div className="grid-3">
+              <div className="metric-card">
+                <div className="metric-value">{signals.length}</div>
+                <div className="metric-label">Signals collected</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-value">{recs.length}</div>
+                <div className="metric-label">Recommendations</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-value" style={{ color: 'var(--emerald)' }}>
+                  +{summary?.estimated_score_gain?.toFixed(0) ?? 0}
+                </div>
+                <div className="metric-label">Potential score gain</div>
+              </div>
+            </div>
+
+            {summary?.biggest_gap && (
+              <div style={{ marginTop: 16, padding: '12px 16px', background: 'rgba(99,102,241,0.08)', border: '1px solid var(--border-glow)', borderRadius: 'var(--r-md)', fontSize: 13, color: 'var(--text-secondary)' }}>
+                <span style={{ color: 'var(--accent-light)', fontWeight: 600 }}>⚡ Biggest gap: </span>
+                {summary.biggest_gap}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── RECOMMENDATIONS ───────────────────────────────── */}
+        {tab === 'recommendations' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">Recommendations</div>
+                <div className="page-subtitle">Priority-sorted actions to improve visibility</div>
+              </div>
+              <button className="btn btn-primary" onClick={handleGenerate} disabled={generating}>
+                {generating ? <span className="spinner" /> : '🧠'}
+                {generating ? 'Analyzing…' : 'Regenerate'}
+              </button>
+            </div>
+            {loading && <div className="loading-overlay"><div className="spinner" /></div>}
+            {!loading && recs.length === 0 && (
+              <div className="empty-state">
+                <div className="empty-icon">🧠</div>
+                <div className="empty-text">No recommendations yet. Collect signals first, then run the Decision Engine.</div>
+                <button className="btn btn-primary" onClick={handleGenerate}>Run Decision Engine</button>
+              </div>
+            )}
+            {recs.map(rec => (
+              <RecommendationCard key={rec.id} rec={rec} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </>
+        )}
+
+        {/* ── SIGNALS ───────────────────────────────────────── */}
+        {tab === 'signals' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">Signals</div>
+                <div className="page-subtitle">Raw visibility data across SEO, Entity, and AI channels</div>
+              </div>
+              <button className="btn btn-ghost" onClick={handleCollect} disabled={collecting}>
+                {collecting ? <span className="spinner" /> : '📡'}
+                {collecting ? 'Collecting…' : 'Collect Now'}
+              </button>
+            </div>
+            <SignalList
+              signals={signals}
+              loading={loading}
+              companyId={company.id}
+              onAiSignalAdded={loadData}
+              showToast={showToast}
+            />
+          </>
+        )}
+
+        {/* ── KNOWLEDGE ─────────────────────────────────────── */}
+        {tab === 'knowledge' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">Knowledge Engine</div>
+                <div className="page-subtitle">Feed your company&apos;s brain with text, documents, and facts</div>
+              </div>
+            </div>
+            <KnowledgePanel companyId={company.id} showToast={showToast} />
+          </>
+        )}
+      </main>
+
+      {toast && <Toast message={toast.msg} type={toast.type} />}
+    </div>
+  );
+}
