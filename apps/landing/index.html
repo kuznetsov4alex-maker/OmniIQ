@@ -163,36 +163,76 @@
     .tl-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--accent2); margin-bottom: 12px; }
     .tl-title { font-size: clamp(24px, 3vw, 38px); font-weight: 800; letter-spacing: -1px; margin-bottom: 48px; }
 
-    .timeline {
-      display: flex; align-items: flex-start; gap: 0;
+    .tl-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      text-align: left;
+    }
+
+    .tl-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
       position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .timeline::before {
+
+    .tl-card:hover { transform: translateY(-3px); }
+
+    .tl-card::before {
       content: ''; position: absolute;
-      top: 24px; left: calc(16.66% + 24px);
-      width: calc(66.67% - 48px); height: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--cyan), var(--emerald));
+      top: 0; left: 0; right: 0; height: 2px;
+      border-radius: 16px 16px 0 0;
     }
 
-    .tl-step {
-      flex: 1; display: flex; flex-direction: column; align-items: center;
-      gap: 14px;
+    .tl-c1::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
+    .tl-c1:hover    { border-color: rgba(99,102,241,0.3); }
+    .tl-c2::before  { background: linear-gradient(90deg, #818cf8, #a78bfa); }
+    .tl-c2:hover    { border-color: rgba(129,140,248,0.3); }
+    .tl-c3::before  { background: linear-gradient(90deg, #22d3ee, #67e8f9); }
+    .tl-c3:hover    { border-color: rgba(34,211,238,0.3); }
+    .tl-c4::before  { background: linear-gradient(90deg, #10b981, #34d399); }
+    .tl-c4:hover    { border-color: rgba(16,185,129,0.3); }
+
+    .tl-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
     }
-    .tl-dot {
-      width: 48px; height: 48px; border-radius: 50%;
+
+    .tl-card-day {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px; color: var(--dimmed);
+    }
+
+    .tl-card-icon {
+      width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 800;
-      position: relative; z-index: 1;
-      font-family: 'JetBrains Mono', monospace;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
     }
-    .dot-1 { background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.5); color: var(--accent2); }
-    .dot-2 { background: rgba(99,102,241,0.2);  border: 2px solid rgba(99,102,241,0.6); color: var(--accent2); }
-    .dot-3 { background: rgba(34,211,238,0.15); border: 2px solid rgba(34,211,238,0.5); color: var(--cyan); }
-    .dot-4 { background: rgba(16,185,129,0.15); border: 2px solid rgba(16,185,129,0.5); color: var(--emerald); }
 
-    .tl-day { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--dimmed); }
-    .tl-event { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; }
-    .tl-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .tl-card-num {
+      font-size: 52px; font-weight: 900;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -3px; line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .tl-c1 .tl-card-num { color: rgba(99,102,241,0.1); }
+    .tl-c2 .tl-card-num { color: rgba(129,140,248,0.1); }
+    .tl-c3 .tl-card-num { color: rgba(34,211,238,0.1); }
+    .tl-c4 .tl-card-num { color: rgba(16,185,129,0.1); }
+
+    .tl-card-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .tl-card-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    @media (max-width:900px) { .tl-cards { grid-template-columns: 1fr 1fr; } }
+    @media (max-width:600px) { .tl-cards { grid-template-columns: 1fr; } }
+
 
     /* ── Score chart mockup ───────────────────────────────────── */
     .chart-section {
@@ -563,11 +603,13 @@
   <a href="#scan" class="nav-cta">Start Free Trial →</a>
 </nav>
 
-<!-- ── Hero ───────────────────────────────────────────────────── -->
+<!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="hero" id="top">
-  <div class="trial-badge">
-    <span class="trial-badge-icon">🎁</span>
-    7-day free trial · No credit card required
+
+  <!-- Next-gen label -->
+  <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.2);border-radius:99px;padding:6px 18px;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;animation:fade-up 0.5s ease both">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 0L8.4 5.6L14 7L8.4 8.4L7 14L5.6 8.4L0 7L5.6 5.6L7 0Z" fill="#818cf8"/></svg>
+    Next-Generation Visibility Platform
   </div>
 
   <h1>
@@ -576,17 +618,26 @@
     <span class="g2">One score. One platform.</span>
   </h1>
 
-  <!-- Channel pills -->
-  <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:28px;animation:fade-up 0.5s 0.15s ease both">
-    <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--accent2)">🔍 SEO &amp; Search</span>
-    <span style="color:var(--dimmed);font-size:12px">&middot;</span>
-    <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--cyan)">🤖 AI Models</span>
-    <span style="color:var(--dimmed);font-size:12px">&middot;</span>
-    <span style="display:inline-flex;align-items:center;gap:5px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:99px;padding:4px 12px;font-size:12px;font-weight:600;color:var(--emerald)">🏷️ Knowledge Graphs</span>
+  <!-- Channel pills with SVG icons -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px;animation:fade-up 0.5s 0.15s ease both">
+    <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--accent2)">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="5.5" cy="5.5" r="4" stroke="#818cf8" stroke-width="1.5"/><line x1="8.7" y1="8.7" x2="12" y2="12" stroke="#818cf8" stroke-width="1.5" stroke-linecap="round"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#818cf8" stroke-width="1"/></svg>
+      SEO &amp; Search
+    </span>
+    <span style="color:var(--dimmed);font-size:11px">&middot;</span>
+    <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--cyan)">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6.5" cy="6.5" r="2" stroke="#22d3ee" stroke-width="1.5"/><line x1="6.5" y1="0" x2="6.5" y2="3" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/><line x1="6.5" y1="10" x2="6.5" y2="13" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/><line x1="0" y1="6.5" x2="3" y2="6.5" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/><line x1="10" y1="6.5" x2="13" y2="6.5" stroke="#22d3ee" stroke-width="1.5" stroke-linecap="round"/><line x1="1.9" y1="1.9" x2="3.9" y2="3.9" stroke="#22d3ee" stroke-width="1.2" stroke-linecap="round"/><line x1="9.1" y1="9.1" x2="11.1" y2="11.1" stroke="#22d3ee" stroke-width="1.2" stroke-linecap="round"/></svg>
+      AI Models
+    </span>
+    <span style="color:var(--dimmed);font-size:11px">&middot;</span>
+    <span style="display:inline-flex;align-items:center;gap:7px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--emerald)">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6.5" cy="2" r="1.5" stroke="#10b981" stroke-width="1.2"/><circle cx="2" cy="10" r="1.5" stroke="#10b981" stroke-width="1.2"/><circle cx="11" cy="10" r="1.5" stroke="#10b981" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="2.8" y2="8.7" stroke="#10b981" stroke-width="1"/><line x1="6.5" y1="3.5" x2="10.2" y2="8.7" stroke="#10b981" stroke-width="1"/><line x1="3.5" y1="10" x2="9.5" y2="10" stroke="#10b981" stroke-width="1"/></svg>
+      Knowledge Graphs
+    </span>
   </div>
 
   <p class="hero-sub">
-    OmniIQ tracks your business across <strong>search engines, AI assistants, and knowledge graphs</strong> —
+    OmniIQ tracks your business across <strong>search engines, AI assistants, and knowledge graphs</strong> &mdash;
     gives you a single Visibility Score, and tells you exactly what to fix. Free for 7 days.
   </p>
 
