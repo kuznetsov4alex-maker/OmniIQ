@@ -52,8 +52,29 @@ export default function Home() {
 
   return (
     <div className="setup-wrap">
-      <div className="setup-card">
-        <div className="setup-logo">OmniIQ</div>
+      <div className="setup-card animate-fade-up">
+        {/* SVG Логотип OmniIQ */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            <svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="16" y1="17" x2="22" y2="8"  stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+              <line x1="16" y1="17" x2="26" y2="22" stroke="rgba(255,255,255,0.15)" stroke-width="0.8" stroke-linecap="round"/>
+              <line x1="16" y1="17" x2="11" y2="27" stroke="rgba(255,255,255,0.2)"  stroke-width="0.9" stroke-linecap="round"/>
+              <line x1="16" y1="17" x2="7"  y2="13" stroke="rgba(255,255,255,0.12)" stroke-width="0.7" stroke-linecap="round"/>
+              <line x1="22" y1="8"  x2="26" y2="22" stroke="rgba(255,255,255,0.08)" stroke-width="0.6" stroke-linecap="round"/>
+              <circle cx="7"  cy="13" r="1.2" fill="rgba(255,255,255,0.3)"/>
+              <circle cx="26" cy="22" r="1.8" fill="#22d3ee"/>
+              <circle cx="11" cy="27" r="1.7" fill="#10b981"/>
+              <circle cx="22" cy="8"  r="1.8" fill="#818cf8"/>
+              <circle cx="16" cy="17" r="4.5" fill="rgba(99,102,241,0.2)"/>
+              <circle cx="16" cy="17" r="3"   fill="#6366f1"/>
+            </svg>
+            <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 24, fontWeight: 800, background: 'linear-gradient(135deg, #6366f1, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              OmniIQ
+            </span>
+          </div>
+        </div>
+
         <div className="setup-title">
           {companies.length > 0 ? 'Выберите проект или добавьте новый' : 'Добро пожаловать в OmniIQ'}
         </div>
@@ -65,11 +86,11 @@ export default function Home() {
 
         {companies.length > 0 && (
           <>
-            <div style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 16, maxHeight: 200, overflowY: 'auto', paddingRight: 4 }}>
               {companies.map(c => (
                 <button key={c.id} className="btn btn-ghost" style={{ width: '100%', marginBottom: 8, justifyContent: 'flex-start' }} onClick={() => setSelected(c)}>
                   <span>◈</span>
-                  <span style={{ flex: 1, textAlign: 'left' }}>{c.name}</span>
+                  <span style={{ flex: 1, textAlign: 'left', marginLeft: 8 }}>{c.name}</span>
                   {c.domain && <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{c.domain}</span>}
                 </button>
               ))}
@@ -89,11 +110,28 @@ export default function Home() {
             <input className="form-input" value={domain} onChange={e => setDomain(e.target.value)} placeholder="klinika-smail.ru" />
           </div>
           {error && <div style={{ color: 'var(--rose)', fontSize: 13, marginBottom: 12 }}>{error}</div>}
-          <button className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={creating}>
+          <button className="btn btn-primary btn-lg" style={{ width: '100%', marginBottom: 12 }} disabled={creating}>
             {creating ? <span className="spinner" /> : '→'}
             {creating ? 'Создаём проект…' : 'Узнать Индекс видимости →'}
           </button>
         </form>
+
+        {/* Кнопка пропуска для тех, у кого уже есть аккаунт (входит в первый доступный проект) */}
+        {companies.length > 0 ? (
+          <button
+            className="btn btn-ghost"
+            style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}
+            onClick={() => setSelected(companies[0])}
+          >
+            Войти в существующий аккаунт (пропустить)
+          </button>
+        ) : (
+          <div style={{ textAlign: 'center', marginTop: 12 }}>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              Нет готовых проектов? Заполните форму выше для старта.
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
