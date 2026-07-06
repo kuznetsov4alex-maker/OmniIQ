@@ -11,6 +11,7 @@ from app.knowledge.models import Entity, KnowledgeChunk  # noqa: F401
 from app.signals.models import Signal  # noqa: F401
 from app.recommendations.models import Recommendation  # noqa: F401
 from app.integrations.models import CompanyIntegration  # noqa: F401
+from app.keywords.models import Keyword  # noqa: F401
 from app.config import settings
 
 config = context.config

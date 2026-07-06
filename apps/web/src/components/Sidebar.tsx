@@ -6,6 +6,7 @@ const tabs = [
   { id: 'overview',        icon: '◉', label: 'Обзор' },
   { id: 'recommendations', icon: '⚡', label: 'Задачи' },
   { id: 'signals',         icon: '◎', label: 'Сигналы' },
+  { id: 'keywords',        icon: '⟡', label: 'Запросы' },
   { id: 'knowledge',       icon: '◈', label: 'База знаний' },
   { id: 'integrations',    icon: '⦿', label: 'Автопилот' },
 ];

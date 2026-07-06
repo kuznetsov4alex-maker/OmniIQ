@@ -99,6 +99,36 @@ export interface IntegrationStatus {
   };
 }
 
+export interface KeywordItem {
+  id: string;
+  company_id: string;
+  query: string;
+  cluster?: string;
+  intent?: string;
+  difficulty?: string;
+  yandex_position?: number;
+  ai_mentioned?: boolean;
+  article_generated: boolean;
+  article_title?: string;
+  article_meta?: string;
+  created_at: string;
+}
+
+export interface KeywordsData {
+  items: KeywordItem[];
+  total: number;
+  clusters: Record<string, number>;
+}
+
+export interface ArticleData {
+  keyword_id: string;
+  query: string;
+  title: string;
+  content: string;
+  meta_description: string;
+  word_count: number;
+}
+
 // ── API Methods ────────────────────────────────────────────────
 
 export const api = {
@@ -169,4 +199,22 @@ export const api = {
 
   disconnectIntegration: (companyId: string, integrationId: string) =>
     apiFetch(`/api/v1/companies/${companyId}/integrations/${integrationId}`, { method: 'DELETE' }),
+
+  // Keywords
+  listKeywords: (companyId: string, cluster?: string) =>
+    apiFetch<KeywordsData>(`/api/v1/companies/${companyId}/keywords/${cluster ? `?cluster=${encodeURIComponent(cluster)}` : ''}`),
+
+  generateKeywords: (companyId: string, data: { max_keywords?: number; force_regenerate?: boolean }) =>
+    apiFetch<KeywordsData>(`/api/v1/companies/${companyId}/keywords/generate`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  generateArticle: (companyId: string, keywordId: string) =>
+    apiFetch<ArticleData>(`/api/v1/companies/${companyId}/keywords/${keywordId}/article`, {
+      method: 'POST',
+    }),
+
+  clearKeywords: (companyId: string) =>
+    apiFetch(`/api/v1/companies/${companyId}/keywords/`, { method: 'DELETE' }),
 };

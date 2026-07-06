@@ -8,10 +8,11 @@ import RecommendationCard from '@/components/RecommendationCard';
 import SignalList from '@/components/SignalList';
 import KnowledgePanel from '@/components/KnowledgePanel';
 import IntegrationsPanel from '@/components/IntegrationsPanel';
+import KeywordsPanel from '@/components/KeywordsPanel';
 import Toast from '@/components/Toast';
 import ScoreTrendChart, { type ScorePoint } from '@/components/ScoreTrendChart';
 
-type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations';
+type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations' | 'keywords';
 
 interface Props {
   company: Company;
@@ -357,6 +358,19 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
             </div>
             <IntegrationsPanel company={company} showToast={showToast} />
+          </>
+        )}
+
+        {/* ── KEYWORDS ──────────────────────────────────────── */}
+        {tab === 'keywords' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">Запросы и контент</div>
+                <div className="page-subtitle">Семантическое ядро из 50 запросов — платформа сгенерирует их сама и напишет статьи для продвижения в Яндексе</div>
+              </div>
+            </div>
+            <KeywordsPanel company={company} showToast={showToast} />
           </>
         )}
       </main>

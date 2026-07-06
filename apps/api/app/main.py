@@ -6,6 +6,7 @@ from app.knowledge.routes import router as knowledge_router
 from app.signals.routes import router as signals_router
 from app.recommendations.routes import router as recommendations_router
 from app.integrations.routes import router as integrations_router
+from app.keywords.routes import router as keywords_router
 from app.config import settings
 
 app = FastAPI(
@@ -30,6 +31,7 @@ app.include_router(knowledge_router, prefix="/api/v1")
 app.include_router(signals_router, prefix="/api/v1")
 app.include_router(recommendations_router, prefix="/api/v1")
 app.include_router(integrations_router, prefix="/api/v1")
+app.include_router(keywords_router, prefix="/api/v1")
 
 
 # ── Health ─────────────────────────────────────────────────────
