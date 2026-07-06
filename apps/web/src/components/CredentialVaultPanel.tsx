@@ -252,7 +252,7 @@ function AddCredentialForm({
                 </label>
                 <input
                   type={secret ? 'password' : 'text'}
-                  value={(form as Record<string, string>)[key]}
+                  value={(form as unknown as Record<string, string>)[key]}
                   onChange={e => setForm(f => ({ ...f, [key]: e.target.value }))}
                   placeholder={placeholder}
                   required={required}
