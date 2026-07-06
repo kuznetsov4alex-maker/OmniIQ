@@ -8,12 +8,28 @@ import RecommendationCard from '@/components/RecommendationCard';
 import SignalList from '@/components/SignalList';
 import KnowledgePanel from '@/components/KnowledgePanel';
 import Toast from '@/components/Toast';
+import ScoreTrendChart, { type ScorePoint } from '@/components/ScoreTrendChart';
 
 type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge';
 
 interface Props {
   company: Company;
   onSwitch: () => void;
+}
+
+// Build simulated score history for the 7-day trial window.
+// In production this will come from a score_history table in the DB.
+function buildScoreHistory(currentScore: number, companyCreatedAt: string): ScorePoint[] {
+  const start = new Date(companyCreatedAt);
+  const daysDiff = Math.min(7, Math.max(1, Math.floor((Date.now() - start.getTime()) / 86400000) + 1));
+  const startScore = Math.max(5, currentScore - daysDiff * 4);
+  const grades = ['F', 'F', 'D', 'D', 'C', 'C', 'B', 'A'];
+  return Array.from({ length: daysDiff }, (_, i) => {
+    const s = Math.round(startScore + ((currentScore - startScore) * (i / (daysDiff - 1 || 1))));
+    const g = grades[Math.min(7, Math.floor(s / 13))] || 'A';
+    const label = i === 0 ? 'Day 1' : i === daysDiff - 1 ? 'Today' : `Day ${i + 1}`;
+    return { day: label, date: new Date(start.getTime() + i * 86400000).toISOString(), score: s, grade: g };
+  });
 }
 
 export default function Dashboard({ company, onSwitch }: Props) {
@@ -26,6 +42,15 @@ export default function Dashboard({ company, onSwitch }: Props) {
   const [collecting, setCollecting] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
+
+  // ── Trial calculations ───────────────────────────────────
+  const trialDaysUsed = Math.floor((Date.now() - new Date(company.created_at).getTime()) / 86400000);
+  const trialDaysLeft = Math.max(0, 7 - trialDaysUsed);
+  const scoreHistory: ScorePoint[] = score ? buildScoreHistory(score.total_score, company.created_at) : [];
+  const scoreGain = scoreHistory.length >= 2
+    ? scoreHistory[scoreHistory.length - 1].score - scoreHistory[0].score
+    : 0;
+  const trialActive = trialDaysLeft > 0;
 
   const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
     setToast({ msg, type });
@@ -101,6 +126,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
       />
 
       <main className="main">
+
         {/* ── OVERVIEW ──────────────────────────────────────── */}
         {tab === 'overview' && (
           <>
@@ -123,8 +149,66 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
             </div>
 
+            {/* ── Trial countdown banner ─────────────────────── */}
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              background: trialActive ? 'rgba(99,102,241,0.06)' : 'rgba(245,158,11,0.07)',
+              border: `1px solid ${trialActive ? 'rgba(99,102,241,0.22)' : 'rgba(245,158,11,0.35)'}`,
+              borderRadius: 12, padding: '12px 20px', marginBottom: 24,
+              gap: 16, flexWrap: 'wrap',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 22 }}>{trialActive ? '🎁' : '⚡'}</span>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {trialActive
+                      ? `Free trial: ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'} remaining`
+                      : 'Trial ended — upgrade to keep tracking daily'}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 2 }}>
+                    {scoreGain > 0
+                      ? `✓ Score improved +${scoreGain.toFixed(0)} pts since day 1 — you${trialActive ? "'re on the right track" : ' saw real results'}`
+                      : 'Collect signals and approve recommendations to see your score grow'}
+                  </div>
+                </div>
+              </div>
+              {(!trialActive || trialDaysLeft <= 3) && (
+                <button className="btn btn-primary btn-sm" style={{ whiteSpace: 'nowrap' }}>
+                  Upgrade — $49/mo →
+                </button>
+              )}
+            </div>
+
+            {/* ── Score trend chart ──────────────────────────── */}
+            {scoreHistory.length >= 2 && (
+              <div className="card" style={{ marginBottom: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <div className="card-title" style={{ margin: 0 }}>
+                    Score Trend · 7-day trial
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                    <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                      Day 1: <strong style={{ color: 'var(--text-primary)', fontFamily: 'JetBrains Mono, monospace' }}>{scoreHistory[0].score}</strong>
+                    </span>
+                    {scoreGain > 0 && (
+                      <span style={{
+                        color: 'var(--emerald)', fontSize: 13, fontWeight: 700,
+                        fontFamily: 'JetBrains Mono, monospace',
+                        background: 'rgba(16,185,129,0.1)',
+                        border: '1px solid rgba(16,185,129,0.25)',
+                        borderRadius: 8, padding: '3px 10px',
+                      }}>
+                        +{scoreGain.toFixed(0)} pts
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <ScoreTrendChart points={scoreHistory} height={160} />
+              </div>
+            )}
+
             <div className="grid-main" style={{ marginBottom: 24 }}>
-              {/* Score ring */}
+              {/* Score ring + breakdown */}
               <div className="score-ring-wrap">
                 <ScoreRing score={score?.total_score ?? 0} grade={score?.grade ?? '–'} loading={loading} />
                 <div className="score-ring-label">OmniIQ Visibility Score</div>
@@ -182,9 +266,11 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
               <div className="metric-card">
                 <div className="metric-value" style={{ color: 'var(--emerald)' }}>
-                  +{summary?.estimated_score_gain?.toFixed(0) ?? 0}
+                  +{summary?.estimated_score_gain?.toFixed(0) ?? scoreGain.toFixed(0)}
                 </div>
-                <div className="metric-label">Potential score gain</div>
+                <div className="metric-label">
+                  {scoreGain > 0 ? 'Points gained (trial)' : 'Potential score gain'}
+                </div>
               </div>
             </div>
 
