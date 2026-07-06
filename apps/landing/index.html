@@ -154,85 +154,153 @@
     }
     .hero-disclaimer span { color: var(--emerald); font-weight: 600; }
 
-    /* ── Trial timeline ───────────────────────────────────────── */
-    .timeline-section {
-      padding: 80px 48px;
-      max-width: 900px; margin: 0 auto;
-      text-align: center;
+    /* ── Trial journey ─────────────────────────────────────────── */
+    .journey-section {
+      padding: 100px 48px;
+      background: var(--surface);
     }
-    .tl-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--accent2); margin-bottom: 12px; }
-    .tl-title { font-size: clamp(24px, 3vw, 38px); font-weight: 800; letter-spacing: -1px; margin-bottom: 48px; }
 
-    .tl-cards {
+    .journey-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .journey-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .j-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; color: var(--accent2); margin-bottom: 12px;
+    }
+
+    .j-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900; letter-spacing: -1.5px; line-height: 1.1;
+    }
+
+    .j-sub {
+      font-size: 16px; color: var(--muted); margin-top: 12px; line-height: 1.7;
+    }
+
+    /* Progress track */
+    .journey-track {
+      position: relative;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      text-align: left;
     }
 
-    .tl-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
+    /* The connecting line sits behind the dots */
+    .journey-track::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(12.5%);
+      right: calc(12.5%);
+      height: 2px;
+      background: linear-gradient(90deg,
+        #6366f1 0%,
+        #818cf8 33%,
+        #22d3ee 66%,
+        #10b981 100%
+      );
+      z-index: 0;
     }
 
-    .tl-card:hover { transform: translateY(-3px); }
-
-    .tl-card::before {
-      content: ''; position: absolute;
-      top: 0; left: 0; right: 0; height: 2px;
-      border-radius: 16px 16px 0 0;
+    .j-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 16px;
     }
 
-    .tl-c1::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
-    .tl-c1:hover    { border-color: rgba(99,102,241,0.3); }
-    .tl-c2::before  { background: linear-gradient(90deg, #818cf8, #a78bfa); }
-    .tl-c2:hover    { border-color: rgba(129,140,248,0.3); }
-    .tl-c3::before  { background: linear-gradient(90deg, #22d3ee, #67e8f9); }
-    .tl-c3:hover    { border-color: rgba(34,211,238,0.3); }
-    .tl-c4::before  { background: linear-gradient(90deg, #10b981, #34d399); }
-    .tl-c4:hover    { border-color: rgba(16,185,129,0.3); }
-
-    .tl-card-top {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .tl-card-day {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 2px; color: var(--dimmed);
-    }
-
-    .tl-card-icon {
-      width: 40px; height: 40px;
+    /* Day marker dot */
+    .j-dot {
+      width: 56px; height: 56px;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 10px;
+      font-size: 18px; font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      position: relative; z-index: 1;
+      margin-bottom: 24px;
+      transition: transform 0.2s;
     }
 
-    .tl-card-num {
-      font-size: 52px; font-weight: 900;
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: -3px; line-height: 1;
+    .j-step:hover .j-dot { transform: scale(1.1); }
+
+    .jd-1 {
+      background: #6366f1;
+      color: white;
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.15), 0 0 0 8px rgba(99,102,241,0.06);
+    }
+
+    .jd-2 {
+      background: var(--surface);
+      border: 2px solid #818cf8;
+      color: #818cf8;
+      box-shadow: 0 0 0 4px rgba(129,140,248,0.1);
+    }
+
+    .jd-3 {
+      background: var(--surface);
+      border: 2px solid #22d3ee;
+      color: #22d3ee;
+      box-shadow: 0 0 0 4px rgba(34,211,238,0.1);
+    }
+
+    .jd-4 {
+      background: #10b981;
+      color: white;
+      box-shadow: 0 0 0 4px rgba(16,185,129,0.15), 0 0 0 8px rgba(16,185,129,0.06);
+    }
+
+    /* Day label */
+    .j-day-tag {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--dimmed);
+      margin-bottom: 8px;
+    }
+
+    /* Step title */
+    .j-step-title {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.3px; color: var(--text);
       margin-bottom: 10px;
     }
 
-    .tl-c1 .tl-card-num { color: rgba(99,102,241,0.1); }
-    .tl-c2 .tl-card-num { color: rgba(129,140,248,0.1); }
-    .tl-c3 .tl-card-num { color: rgba(34,211,238,0.1); }
-    .tl-c4 .tl-card-num { color: rgba(16,185,129,0.1); }
+    /* Description */
+    .j-step-desc {
+      font-size: 14px; color: var(--muted);
+      line-height: 1.7; max-width: 210px;
+    }
 
-    .tl-card-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .tl-card-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+    /* Divider between step content */
+    .j-step + .j-step {
+      border-left: 1px solid var(--border);
+    }
 
-    @media (max-width:900px) { .tl-cards { grid-template-columns: 1fr 1fr; } }
-    @media (max-width:600px) { .tl-cards { grid-template-columns: 1fr; } }
-
+    @media (max-width: 768px) {
+      .journey-track {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .journey-track::before { display: none; }
+      .j-step {
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 24px 0;
+        border-left: none;
+        border-top: 1px solid var(--border);
+      }
+      .j-step + .j-step { border-left: none; }
+      .j-dot { margin-bottom: 0; flex-shrink: 0; }
+      .j-step-desc { max-width: 100%; }
+    }
 
     /* ── Score chart mockup ───────────────────────────────────── */
     .chart-section {
