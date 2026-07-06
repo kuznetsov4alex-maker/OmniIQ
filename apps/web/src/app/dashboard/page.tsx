@@ -9,10 +9,11 @@ import SignalList from '@/components/SignalList';
 import KnowledgePanel from '@/components/KnowledgePanel';
 import IntegrationsPanel from '@/components/IntegrationsPanel';
 import KeywordsPanel from '@/components/KeywordsPanel';
+import CredentialVaultPanel from '@/components/CredentialVaultPanel';
 import Toast from '@/components/Toast';
 import ScoreTrendChart, { type ScorePoint } from '@/components/ScoreTrendChart';
 
-type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations' | 'keywords';
+type Tab = 'overview' | 'recommendations' | 'signals' | 'knowledge' | 'integrations' | 'keywords' | 'vault';
 
 interface Props {
   company: Company;
@@ -371,6 +372,18 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
             </div>
             <KeywordsPanel company={company} showToast={showToast} />
+          </>
+        )}
+        {/* ── VAULT ─────────────────────────────────────────── */}
+        {tab === 'vault' && (
+          <>
+            <div className="page-header">
+              <div>
+                <div className="page-title">🔐 Хранилище доступов</div>
+                <div className="page-subtitle">Зашифрованное хранилище FTP, OAuth и API ключей. Журнал каждого использования. Отзыв в один клик.</div>
+              </div>
+            </div>
+            <CredentialVaultPanel companyId={company.id} />
           </>
         )}
       </main>

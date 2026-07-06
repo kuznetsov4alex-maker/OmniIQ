@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     app_secret_key: str = "change-me"
     cors_origins: list[str] = ["http://localhost:3000"]
 
+    # Security — Credential Vault
+    # Generate with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+    credential_master_key: str = ""   # MUST be set in production
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

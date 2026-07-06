@@ -7,12 +7,13 @@ from app.signals.routes import router as signals_router
 from app.recommendations.routes import router as recommendations_router
 from app.integrations.routes import router as integrations_router
 from app.keywords.routes import router as keywords_router
+from app.vault.router import router as vault_router
 from app.config import settings
 
 app = FastAPI(
     title="OmniIQ API",
     description="Company Brain for Autonomous Digital Visibility",
-    version="0.4.0",
+    version="0.5.0",
     docs_url="/docs" if settings.app_debug else None,
     redoc_url="/redoc" if settings.app_debug else None,
 )
@@ -32,9 +33,10 @@ app.include_router(signals_router, prefix="/api/v1")
 app.include_router(recommendations_router, prefix="/api/v1")
 app.include_router(integrations_router, prefix="/api/v1")
 app.include_router(keywords_router, prefix="/api/v1")
+app.include_router(vault_router, prefix="/api/v1")
 
 
 # ── Health ─────────────────────────────────────────────────────
 @app.get("/health", tags=["system"])
 async def health() -> dict:
-    return {"status": "ok", "version": "0.4.0"}
+    return {"status": "ok", "version": "0.5.0"}

@@ -9,6 +9,7 @@ const tabs = [
   { id: 'keywords',        icon: '⟡', label: 'Запросы' },
   { id: 'knowledge',       icon: '◈', label: 'База знаний' },
   { id: 'integrations',    icon: '⦿', label: 'Автопилот' },
+  { id: 'vault',           icon: '🔐', label: 'Доступы' },
 ];
 
 interface Props {
@@ -67,7 +68,7 @@ export default function Sidebar({ company, activeTab, onTabChange, onSwitch, pen
       <div style={{ padding: '16px 20px', borderTop: '1px solid var(--border)' }}>
         <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
           {company.domain && <div>◎ {company.domain}</div>}
-          <div style={{ marginTop: 4 }}>v0.4.0 · Бета-режим</div>
+          <div style={{ marginTop: 4 }}>v0.5.0 · Бета-режим</div>
         </div>
       </div>
     </nav>
