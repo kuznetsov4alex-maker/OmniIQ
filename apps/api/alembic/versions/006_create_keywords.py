@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.create_table(
         "keywords",
         sa.Column("id", postgresql.UUID(as_uuid=True), primary_key=True),
-        sa.Column("company_id", postgresql.UUID(as_uuid=True), nullable=False, index=True),
+        sa.Column("company_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("query", sa.String(500), nullable=False),
         sa.Column("cluster", sa.String(100), nullable=True),
         sa.Column("intent", sa.String(50), nullable=True),
