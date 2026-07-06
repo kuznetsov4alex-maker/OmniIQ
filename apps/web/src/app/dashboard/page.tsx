@@ -176,7 +176,7 @@ export default function Dashboard({ company, onSwitch }: Props) {
               </div>
               {(!trialActive || trialDaysLeft <= 3) && (
                 <button className="btn btn-primary btn-sm" style={{ whiteSpace: 'nowrap' }}>
-                  Продолжить за 1 490 ₽/мес →
+                  Продолжить за 2 990 ₽/мес →
                 </button>
               )}
             </div>
