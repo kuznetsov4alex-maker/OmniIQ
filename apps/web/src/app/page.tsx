@@ -116,22 +116,30 @@ export default function Home() {
           </button>
         </form>
 
-        {/* Кнопка пропуска для тех, у кого уже есть аккаунт (входит в первый доступный проект) */}
-        {companies.length > 0 ? (
-          <button
-            className="btn btn-ghost"
-            style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}
-            onClick={() => setSelected(companies[0])}
-          >
-            Войти в существующий аккаунт (пропустить)
-          </button>
-        ) : (
-          <div style={{ textAlign: 'center', marginTop: 12 }}>
-            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-              Нет готовых проектов? Заполните форму выше для старта.
-            </span>
-          </div>
-        )}
+        {/* Кнопка пропуска для тех, у кого уже есть аккаунт или кто хочет протестировать */}
+        <button
+          type="button"
+          className="btn btn-ghost"
+          style={{ width: '100%', justifyContent: 'center', fontSize: 13, marginTop: 4 }}
+          onClick={async () => {
+            if (companies.length > 0) {
+              setSelected(companies[0]);
+            } else {
+              setCreating(true);
+              try {
+                const c = await api.createCompany({ name: 'Мой первый проект', domain: 'example.com' });
+                setSelected(c);
+              } catch (err: unknown) {
+                setError(err instanceof Error ? err.message : 'Ошибка быстрого старта.');
+              } finally {
+                setCreating(false);
+              }
+            }
+          }}
+          disabled={creating}
+        >
+          {creating ? 'Входим...' : 'Пропустить этот этап'}
+        </button>
       </div>
     </div>
   );
