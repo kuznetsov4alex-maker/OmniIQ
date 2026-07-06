@@ -433,18 +433,18 @@
 
     /* ── Тарифы ─────────────────────────────────────────────── */
     .pricing-section { background: var(--surface); padding: 80px 48px; }
-    .pricing-inner { max-width: 900px; margin: 0 auto; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .pricing-inner { max-width: 1200px; margin: 0 auto; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 48px; }
     .p-card {
       background: var(--elevated); border: 1px solid var(--border);
-      border-radius: 20px; padding: 32px;
+      border-radius: 16px; padding: 24px;
       transition: transform 0.2s;
     }
     .p-card:hover { transform: translateY(-4px); }
     .p-card.featured { border-color: rgba(99,102,241,0.4); background: linear-gradient(160deg,rgba(99,102,241,0.08),var(--elevated)); position: relative; }
     .p-card.featured::before { content: '✦ Лучшая цена'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 99px; white-space: nowrap; }
     .p-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; }
-    .p-price { font-size: 44px; font-weight: 900; letter-spacing: -2px; line-height: 1; }
+    .p-price { font-size: 36px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
     .p-price sup { font-size: 20px; letter-spacing: 0; vertical-align: top; margin-top: 10px; display: inline-block; }
     .p-period { font-size: 13px; color: var(--muted); margin: 4px 0 8px; }
     .p-trial { font-size: 13px; font-weight: 600; color: var(--emerald); margin-bottom: 24px; }
@@ -777,6 +777,15 @@
     <span>✓ 7 дней бесплатно</span> &nbsp;·&nbsp;
     <span>✓ Без карты</span> &nbsp;·&nbsp;
     <span>✓ Реальные данные, не демо</span>
+  </div>
+
+  <!-- No-PF safety badge -->
+  <div style="margin-top:20px;display:inline-flex;align-items:center;gap:10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:10px 20px;font-size:13px;color:#fca5a5;animation:fade-up 0.5s 0.5s ease both">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="8" cy="8" r="7" stroke="#ef4444" stroke-width="1.4"/>
+      <line x1="5" y1="8" x2="11" y2="8" stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    <span><strong style="color:#fca5a5">Не используем поведенческие факторы (ПФ)</strong> — нет риска санкций Яндекса и понижения индекса</span>
   </div>
 </section>
 
@@ -1125,6 +1134,20 @@
   <p style="font-size:15px;color:var(--muted);max-width:560px;line-height:1.7;margin-top:12px" class="reveal">
     Старые инструменты строились под 10 синих ссылок Google. OmniIQ создан для мира, где ИИ-ассистенты — это новый поиск, и ваш бизнес должен быть понятен машинам, а не просто проиндексирован.
   </p>
+
+  <!-- No-PF notice -->
+  <div style="display:inline-flex;align-items:flex-start;gap:14px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.18);border-radius:14px;padding:16px 22px;margin-top:28px;max-width:680px;text-align:left" class="reveal">
+    <div style="width:36px;height:36px;border-radius:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="9" cy="9" r="8" stroke="#ef4444" stroke-width="1.5"/>
+        <line x1="5.5" y1="9" x2="12.5" y2="9" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div style="font-size:14px;font-weight:700;color:#fca5a5;margin-bottom:5px">Не используем поведенческие факторы (ПФ)</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.65">Продвижение через ИИ-видимость, entity-оптимизацию, структурированные данные и репутационные сигналы — без накрутки поведенческих факторов. <strong style="color:#f1f5f9">Нулевой риск санкций Яндекса и понижения индекса.</strong></div>
+    </div>
+  </div>
 
   <div class="gen-compare">
 
