@@ -18,8 +18,23 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    # Enable pgvector extension
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    # Enable pgvector extension (requires pgvector installed in PostgreSQL)
+    # Uses SAVEPOINT so a missing extension doesn't abort the whole transaction
+    conn = op.get_bind()
+    try:
+        conn.execute(sa.text("SAVEPOINT pgvector_check"))
+        conn.execute(sa.text("CREATE EXTENSION IF NOT EXISTS vector"))
+        conn.execute(sa.text("RELEASE SAVEPOINT pgvector_check"))
+        pgvector_available = True
+    except Exception:
+        conn.execute(sa.text("ROLLBACK TO SAVEPOINT pgvector_check"))
+        pgvector_available = False
+        import warnings
+        warnings.warn(
+            "pgvector not installed — embeddings use text-search fallback. "
+            "See: https://github.com/pgvector/pgvector",
+            stacklevel=2,
+        )
 
     # ── entities ──────────────────────────────────────────────
     op.create_table(
@@ -88,18 +103,18 @@ def upgrade() -> None:
     )
     op.create_index("ix_knowledge_chunks_company_id", "knowledge_chunks", ["company_id"])
 
-    # Add pgvector embedding column (3072 dims for text-embedding-3-large)
-    op.execute(
-        "ALTER TABLE knowledge_chunks ADD COLUMN embedding vector(3072)"
-    )
-    # HNSW index for fast approximate nearest neighbor search
-    op.execute(
-        """
-        CREATE INDEX ix_knowledge_chunks_embedding
-        ON knowledge_chunks
-        USING hnsw (embedding vector_cosine_ops)
-        """
-    )
+    # pgvector embedding column — only if extension is available
+    if pgvector_available:
+        op.execute(
+            "ALTER TABLE knowledge_chunks ADD COLUMN embedding vector(3072)"
+        )
+        op.execute(
+            """
+            CREATE INDEX ix_knowledge_chunks_embedding
+            ON knowledge_chunks
+            USING hnsw (embedding vector_cosine_ops)
+            """
+        )
 
 
 def downgrade() -> None:

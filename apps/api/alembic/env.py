@@ -1,9 +1,7 @@
-import asyncio
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import pool
-from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlalchemy import engine_from_config, pool
 
 from app.database import Base
 
@@ -12,10 +10,15 @@ from app.companies.models import Company  # noqa: F401
 from app.knowledge.models import Entity, KnowledgeChunk  # noqa: F401
 from app.signals.models import Signal  # noqa: F401
 from app.recommendations.models import Recommendation  # noqa: F401
+from app.config import settings
 
 config = context.config
 fileConfig(config.config_file_name)  # type: ignore[arg-type]
 target_metadata = Base.metadata
+
+# Use sync psycopg2 driver for migrations (asyncpg is for the app only)
+SYNC_URL = settings.database_url.replace("+asyncpg", "+psycopg2")
+config.set_main_option("sqlalchemy.url", SYNC_URL)
 
 
 def run_migrations_offline() -> None:
@@ -30,25 +33,16 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection):  # type: ignore[no-untyped-def]
-    context.configure(connection=connection, target_metadata=target_metadata)
-    with context.begin_transaction():
-        context.run_migrations()
-
-
-async def run_async_migrations() -> None:
-    connectable = async_engine_from_config(
+def run_migrations_online() -> None:
+    connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
-    async with connectable.connect() as connection:
-        await connection.run_sync(do_run_migrations)
-    await connectable.dispose()
-
-
-def run_migrations_online() -> None:
-    asyncio.run(run_async_migrations())
+    with connectable.connect() as connection:
+        context.configure(connection=connection, target_metadata=target_metadata)
+        with context.begin_transaction():
+            context.run_migrations()
 
 
 if context.is_offline_mode():
