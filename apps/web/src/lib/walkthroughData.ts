@@ -128,13 +128,14 @@ const yandexWebmaster: Walkthrough = {
         <text x="188" y="70" text-anchor="middle" font-size="12" fill="#666" font-family="Inter,sans-serif">Meta-тег</text>
         <rect x="246" y="50" width="100" height="30" rx="6" fill="#1e1e2e" stroke="#333" stroke-width="1"/>
         <text x="296" y="70" text-anchor="middle" font-size="12" fill="#666" font-family="Inter,sans-serif">DNS</text>
+        <text x="296" y="70" text-anchor="middle" font-size="12" fill="#666" font-family="DNS">DNS</text>
         <rect x="30" y="100" width="440" height="70" rx="8" fill="#141420" stroke="#333" stroke-width="1"/>
         <text x="50" y="122" font-size="11" fill="#888" font-family="Inter,sans-serif">1. Скачайте файл:</text>
         <rect x="50" y="130" width="200" height="26" rx="6" fill="#1e1e2e" stroke="#6366f1" stroke-width="1"/>
         <text x="60" y="148" font-size="11" fill="#818cf8" font-family="monospace">yandex_abc123def456.html</text>
         <rect x="270" y="130" width="120" height="26" rx="6" fill="#FFCC00"/>
         <text x="330" y="148" text-anchor="middle" font-size="11" font-weight="600" fill="#000" font-family="Inter,sans-serif">⬇ Скачать</text>
-        ${arrow('390", "143', 0)}
+        ${arrow('390', '143', 0)}
         ${pulse('268', '143')}
       </svg>`,
     },
@@ -304,7 +305,7 @@ const yandexSpravochnik: Walkthrough = {
         <text x="50" y="102" font-size="12" fill="#888" font-family="Inter,sans-serif">Модерация: 1-3 рабочих дня</text>
         <rect x="330" y="110" width="120" height="32" rx="8" fill="#10b981"/>
         <text x="390" y="130" text-anchor="middle" font-size="13" font-weight="700" fill="#fff" font-family="Inter,sans-serif">Отправить ✓</text>
-        ${arrow('270", "126', 0)}
+        ${arrow('270', '126', 0)}
         ${pulse('328', '126')}
       </svg>`,
     },
@@ -355,7 +356,7 @@ const wikidata: Walkthrough = {
         <text x="16" y="85" font-size="11" fill="#36c" font-family="sans-serif">Recent changes</text>
         <text x="16" y="105" font-size="11" fill="#36c" font-family="sans-serif" font-weight="bold" text-decoration="underline">Create new item</text>
         <text x="16" y="125" font-size="11" fill="#36c" font-family="sans-serif">Random item</text>
-        ${arrow('160", "105', 180)}
+        ${arrow('160', '105', 180)}
         ${pulse('158', '105')}
         <text x="180" y="109" font-size="12" fill="#006699" font-family="sans-serif">← Нажмите здесь</text>
       </svg>`,
@@ -399,9 +400,9 @@ const wikidata: Walkthrough = {
         <rect x="30" y="108" width="440" height="36" rx="6" fill="#fff3cd"/>
         <text x="46" y="129" font-size="12" fill="#54595d" font-family="sans-serif" font-weight="600">страна (P17)</text>
         <text x="250" y="129" font-size="12" fill="#36c" font-family="sans-serif">Россия (Q159)</text>
-        ${pulse('475", "129')}
+        ${pulse('475', '129')}
         <text x="46" y="170" font-size="11" fill="#36c" font-family="sans-serif">+ добавить утверждение</text>
-        ${arrow('150", "165', 180)}
+        ${arrow('150', '165', 180)}
       </svg>`,
     },
     {
@@ -418,7 +419,7 @@ const wikidata: Walkthrough = {
         <text x="30" y="76" font-size="12" fill="#666" font-family="sans-serif">российская компания в сфере...</text>
         <rect x="30" y="100" width="160" height="30" rx="6" fill="#36c"/>
         <text x="110" y="119" text-anchor="middle" font-size="12" fill="#fff" font-family="sans-serif">📋 Скопировать Q-ID</text>
-        ${arrow('192", "115', 180)}
+        ${arrow('192', '115', 180)}
         ${pulse('190', '115')}
         <text x="210" y="119" font-size="12" fill="#006699" font-family="sans-serif">← Скопируйте в OmniIQ</text>
       </svg>`,
@@ -468,7 +469,7 @@ const twoGis: Walkthrough = {
         <text x="50" y="134" font-size="11" fill="rgba(255,255,255,0.5)" font-family="sans-serif">ул. Примерная, 1 · Москва</text>
         <rect x="360" y="104" width="100" height="28" rx="6" fill="#29a8e0"/>
         <text x="410" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#fff" font-family="sans-serif">Это моя</text>
-        ${arrow('300", "118', 0)}
+        ${arrow('300', '118', 0)}
         ${pulse('358', '118')}
       </svg>`,
     },
@@ -541,7 +542,7 @@ const schemaOrg: Walkthrough = {
         <text x="46" y="127" font-size="10" fill="#818cf8" font-family="monospace">&lt;/script&gt;</text>
         <rect x="340" y="160" width="130" height="30" rx="8" fill="#6366f1"/>
         <text x="405" y="179" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Inter,sans-serif">📋 Скопировать</text>
-        ${arrow('270", "175', 0)}
+        ${arrow('270', '175', 0)}
         ${pulse('338', '175')}
       </svg>`,
     },
@@ -562,7 +563,7 @@ const schemaOrg: Walkthrough = {
         <text x="36" y="128" font-size="10" fill="#10b981" font-family="monospace">  { "@type": "Organization", "name": "..." }</text>
         <text x="36" y="144" font-size="10" fill="#818cf8" font-family="monospace">&lt;/script&gt;</text>
         <text x="30" y="175" font-size="11" fill="#9cdcfe" font-family="monospace">&lt;/head&gt;</text>
-        ${pulse('470", "120')}
+        ${pulse('470', '120')}
         <text x="30" y="200" font-size="10" fill="#10b981" font-family="monospace">↑ Вставьте сюда, перед &lt;/head&gt;</text>
       </svg>`,
     },

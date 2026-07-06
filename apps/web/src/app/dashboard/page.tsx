@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useState, useCallback } from 'react';
 import { api, type Company, type VisibilityScore, type Recommendation, type RecommendationSummary, type Signal } from '@/lib/api';
 import Sidebar from '@/components/Sidebar';
@@ -46,10 +48,14 @@ export default function Dashboard({ company, onSwitch }: Props) {
   const [generating, setGenerating] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
+  // Guard against SSR prerender without company prop
+  if (!company) return null;
+
+
   // ── Trial calculations ───────────────────────────────────
-  const trialDaysUsed = Math.floor((Date.now() - new Date(company.created_at).getTime()) / 86400000);
+  const trialDaysUsed = company?.created_at ? Math.floor((Date.now() - new Date(company.created_at).getTime()) / 86400000) : 0;
   const trialDaysLeft = Math.max(0, 7 - trialDaysUsed);
-  const scoreHistory: ScorePoint[] = score ? buildScoreHistory(score.total_score, company.created_at) : [];
+  const scoreHistory: ScorePoint[] = (score && company?.created_at) ? buildScoreHistory(score.total_score, company.created_at) : [];
   const scoreGain = scoreHistory.length >= 2
     ? scoreHistory[scoreHistory.length - 1].score - scoreHistory[0].score
     : 0;
